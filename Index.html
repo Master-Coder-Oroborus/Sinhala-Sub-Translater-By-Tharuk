@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinhala AI Subtitle Translator</title>
+    <style>
+        /* නවීන සහ ආකර්ෂණීය පෙනුම (Modern UI) */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            max-width: 600px;
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 0;
+            font-weight: 600;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-size: 14px;
+        }
+        input[type="file"], input[type="password"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f6fa;
+            transition: all 0.3s;
+        }
+        input[type="password"]:focus, select:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 176, 155, 0.4);
+        }
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        #downloadBtn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            display: none;
+            margin-top: 20px;
+        }
+        /* Progress Bar Styles */
+        .progress-container {
+            display: none;
+            margin-top: 25px;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 20px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        .status-text {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>AI Subtitle Translator 🇱🇰</h2>
+        <p class="subtitle">ස්වභාවිකව කතා කරන සිංහලට පරිවර්තනය කිරීම සඳහා</p>
+
+        <div class="form-group">
+            <label>1. ඉංග්‍රීසි .srt ෆයිල් එක තෝරන්න:</label>
+            <input type="file" id="srtFileInput" accept=".srt">
+        </div>
+
+        <div class="form-group">
+            <label>2. API Key එක ඇතුලත් කරන්න:</label>
+            <input type="password" id="apiKeyInput" placeholder="ඔබගේ Gemini API Key එක...">
+        </div>
+
+        <div class="form-group">
+            <label>3. වරකට යවන ප්‍රමාණය (Batch Size) තෝරන්න:</label>
+            <select id="batchSizeInput">
+                <option value="40">40 Subtitles per batch</option>
+                <option value="60" selected>60 Subtitles per batch (නිර්දේශිතයි)</option>
+                <option value="80">80 Subtitles per batch</option>
+                <option value="100">100 Subtitles per batch</option>
+            </select>
+        </div>
+
+        <button id="translateBtn">පරිවර්තනය අරඹන්න</button>
+        
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="status-text" id="statusMessage">පරිවර්තනය ආරම්භ වෙමින්...</div>
+        </div>
+
+        <button id="downloadBtn">සිංහල Subtitle ෆයිල් එක Download කරන්න</button>
+    </div>
+
+    <script>
+        let finalTranslatedContent = "";
+
+        document.getElementById('translateBtn').addEventListener('click', async function() {
+            const fileInput = document.getElementById('srtFileInput');
+            const apiKey = document.getElementById('apiKeyInput').value.trim();
+            const batchSize = parseInt(document.getElementById('batchSizeInput').value);
+            
+            const translateBtn = document.getElementById('translateBtn');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const status = document.getElementById('statusMessage');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            if (fileInput.files.length === 0) {
+                alert("කරුණාකර .srt ෆයිල් එකක් තෝරන්න!"); return;
+            }
+            if (apiKey === "") {
+                alert("කරුණාකර API Key එක ඇතුලත් කරන්න!"); return;
+            }
+
+            // UI Reset
+            translateBtn.disabled = true;
+            downloadBtn.style.display = "none";
+            progressContainer.style.display = "block";
+            progressFill.style.width = "0%";
+            finalTranslatedContent = "";
+
+            const file = fileInput.files[0];
+            const text = await file.text();
+
+            // Subtitle ෆයිල් එක හිස්තැන් (blank lines) වලින් කඩා ගැනීම
+            const blocks = text.trim().split(/\r?\n\r?\n/);
+            const totalBlocks = blocks.length;
+            
+            // Batch වලට වෙන් කිරීම
+            const batches = [];
+            for (let i = 0; i < totalBlocks; i += batchSize) {
+                batches.push(blocks.slice(i, i + batchSize).join("\n\n"));
+            }
+
+            const totalBatches = batches.length;
+            status.innerText = `මුළු කාණ්ඩ (Batches) ගණන ${totalBatches} කි. පරිවර්තනය ආරම්භ වේ...`;
+
+            for (let i = 0; i < totalBatches; i++) {
+                status.innerText = `කාණ්ඩ ${i + 1} / ${totalBatches} පරිවර්තනය වෙමින් පවතී...`;
+                
+                const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
+                Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra Markdown, stars, or explanations. Only output the translated SRT content.\n\n${batches[i]}`;
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(requestBody)
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                        status.innerText = "API දෝෂයක්: " + data.error.message;
+                        translateBtn.disabled = false;
+                        return;
+                    }
+
+                    // AI එකෙන් එන දත්ත වල markdown (```srt) තිබුනොත් එය ඉවත් කිරීම
+                    let translatedText = data.candidates[0].content.parts[0].text;
+                    translatedText = translatedText.replace(/```srt\n/g, '').replace(/```/g, '').trim();
+
+                    finalTranslatedContent += translatedText + "\n\n";
+
+                    // Progress Bar එක අප්ඩේට් කිරීම
+                    const progressPercentage = Math.round(((i + 1) / totalBatches) * 100);
+                    progressFill.style.width = progressPercentage + "%";
+
+                    // Rate limit ගැටළු මගහරවා ගැනීමට තත්පර 2ක විරාමයක් (Delay)
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+
+                } catch (error) {
+                    status.innerText = "අන්තර්ජාල සම්බන්ධතා දෝෂයක්. කරුණාකර නැවත උත්සාහ කරන්න.";
+                    translateBtn.disabled = false;
+                    return;
+                }
+            }
+
+            status.innerText = "පරිවර්තනය 100% ක් සාර්ථකයි!";
+            translateBtn.disabled = false;
+            downloadBtn.style.display = "block";
+        });
+
+        // Download බටන් එක
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            if (!finalTranslatedContent) return;
+            const blob = new Blob([finalTranslatedContent.trim()], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'Sinhala_Spoken_Subtitles.srt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
