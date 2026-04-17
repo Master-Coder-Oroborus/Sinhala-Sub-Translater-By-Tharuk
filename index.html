@@ -349,8 +349,8 @@
                 const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
                 Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations or borders. Only output the translated SRT content.\n\n${batches[i]}`;
 
-                // Yawatkalina karapu Model eka (gemini-1.5-flash-latest)
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+                // හැම ගිණුමකටම වැඩ කරන 'gemini-pro' මාදිලිය භාවිතා කර ඇත
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
                 const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
 
                 try {
