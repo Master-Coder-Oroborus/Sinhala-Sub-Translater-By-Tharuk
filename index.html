@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Subtitle Translator</title>
+    <title>AI Subtitle Translator By Tharuk</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Noto+Sans+Sinhala:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,6 +19,7 @@
             --accent-hover: #0284c7;
             --success-color: #10b981;
             --input-bg: #0f172a;
+            --help-bg: #0c4a6e;
         }
 
         body {
@@ -41,7 +42,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             max-width: 650px;
             width: 100%;
-            border: none; /* No borders */
+            border: none;
         }
 
         .header {
@@ -52,21 +53,34 @@
         .logo-icon {
             font-size: 48px;
             color: var(--accent-color);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.3));
         }
 
         h2 {
             margin: 0;
             font-weight: 600;
-            font-size: 24px;
+            font-size: 26px;
+            letter-spacing: 0.5px;
+        }
+
+        .creator-badge {
+            display: inline-block;
+            background-color: rgba(14, 165, 233, 0.15);
+            color: var(--accent-color);
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 8px;
+            margin-bottom: 15px;
             letter-spacing: 0.5px;
         }
 
         p.subtitle {
             color: var(--text-muted);
             font-size: 14px;
-            margin-top: 8px;
+            margin: 0;
         }
 
         .form-group {
@@ -100,7 +114,7 @@
             padding: 15px 15px 15px 45px;
             background-color: var(--input-bg);
             color: var(--text-main);
-            border: none; /* No white borders */
+            border: none;
             border-radius: 10px;
             font-family: inherit;
             font-size: 14px;
@@ -131,12 +145,34 @@
             box-shadow: 0 0 0 2px var(--accent-color);
         }
 
+        .api-help-box {
+            background-color: var(--help-bg);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #bae6fd;
+            line-height: 1.5;
+        }
+
+        .api-help-box a {
+            color: #38bdf8;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .api-help-box a:hover {
+            color: #7dd3fc;
+            text-decoration: underline;
+        }
+
         button {
             width: 100%;
             padding: 16px;
             background-color: var(--accent-color);
             color: white;
-            border: none; /* No white borders */
+            border: none;
             border-radius: 10px;
             font-size: 16px;
             font-weight: 600;
@@ -172,7 +208,6 @@
             background-color: #059669;
         }
 
-        /* Progress Bar */
         .progress-container {
             display: none;
             margin-top: 30px;
@@ -205,26 +240,6 @@
             margin-top: 15px;
             color: var(--text-muted);
         }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #334155;
-        }
-
-        .footer p {
-            margin: 0;
-            color: var(--text-muted);
-            font-size: 13px;
-            letter-spacing: 0.5px;
-        }
-        
-        .footer .creator-name {
-            color: var(--accent-color);
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
@@ -233,6 +248,7 @@
         <div class="header">
             <i class="fa-solid fa-closed-captioning logo-icon"></i>
             <h2>AI Subtitle Translator</h2>
+            <div class="creator-badge">By Tharuk Bandara Edirisuriya</div>
             <p class="subtitle">ස්වභාවිකව කතා කරන සිංහලට පරිවර්තනය කිරීම සඳහා</p>
         </div>
 
@@ -249,6 +265,10 @@
             <div class="input-wrapper">
                 <i class="fa-solid fa-key"></i>
                 <input type="password" id="apiKeyInput" placeholder="ඔබගේ Gemini API Key එක මෙතන අලවන්න...">
+            </div>
+            <div class="api-help-box">
+                <i class="fa-solid fa-circle-info"></i> API Key එකක් නොමැතිද? <br>
+                <a href="https://aistudio.google.com/app/apikey" target="_blank">මෙතනින් Google AI Studio වෙත ගොස්</a> ඔබගේ Google ගිණුමෙන් ලොග් වී <b>"Create API key"</b> ඔබා නොමිලේ Key එකක් ලබාගන්න. ඉන්පසු එය කොපි කර ඉහත කොටුවට දමන්න.
             </div>
         </div>
 
@@ -279,10 +299,6 @@
         <button id="downloadBtn">
             <i class="fa-solid fa-download"></i> සිංහල Subtitle ෆයිල් එක Download කරන්න
         </button>
-
-        <div class="footer">
-            <p>AI Subtitle Translator By <span class="creator-name">Tharuk Bandara Edirisuriya</span></p>
-        </div>
     </div>
 
     <script>
@@ -331,9 +347,10 @@
                 status.innerHTML = `කාණ්ඩ <strong style="color:var(--accent-color)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
                 
                 const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
-                Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra Markdown, explanations, or borders. Only output the translated SRT content.\n\n${batches[i]}`;
+                Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations or borders. Only output the translated SRT content.\n\n${batches[i]}`;
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                // Yawatkalina karapu Model eka (gemini-1.5-flash-latest)
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
                 const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
 
                 try {
@@ -360,6 +377,7 @@
                     const progressPercentage = Math.round(((i + 1) / totalBatches) * 100);
                     progressFill.style.width = progressPercentage + "%";
 
+                    // Rate limit protection
                     await new Promise(resolve => setTimeout(resolve, 2000));
 
                 } catch (error) {
