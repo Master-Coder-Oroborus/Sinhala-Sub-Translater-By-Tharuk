@@ -18,6 +18,7 @@
             --accent-color: #0ea5e9;
             --accent-hover: #0284c7;
             --success-color: #10b981;
+            --warning-color: #f59e0b;
             --input-bg: #0f172a;
             --help-bg: #0c4a6e;
         }
@@ -40,7 +41,7 @@
             padding: 40px;
             border-radius: 16px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            max-width: 650px;
+            max-width: 700px;
             width: 100%;
             border: none;
         }
@@ -145,28 +146,6 @@
             box-shadow: 0 0 0 2px var(--accent-color);
         }
 
-        .api-help-box {
-            background-color: var(--help-bg);
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-size: 13px;
-            color: #bae6fd;
-            line-height: 1.5;
-        }
-
-        .api-help-box a {
-            color: #38bdf8;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .api-help-box a:hover {
-            color: #7dd3fc;
-            text-decoration: underline;
-        }
-
         button {
             width: 100%;
             padding: 16px;
@@ -208,17 +187,15 @@
             background-color: #059669;
         }
 
-        .progress-container {
+        /* Progress Bar & Live Preview Area */
+        .processing-area {
             display: none;
             margin-top: 30px;
-            background-color: var(--input-bg);
-            border-radius: 10px;
-            padding: 20px;
         }
 
         .progress-bar-bg {
             width: 100%;
-            background-color: var(--card-bg);
+            background-color: var(--input-bg);
             border-radius: 8px;
             height: 12px;
             overflow: hidden;
@@ -239,6 +216,48 @@
             font-size: 14px;
             margin-top: 15px;
             color: var(--text-muted);
+            min-height: 20px;
+        }
+
+        /* Live Preview Box */
+        .live-preview-box {
+            background-color: var(--input-bg);
+            border-radius: 10px;
+            margin-top: 20px;
+            padding: 15px;
+            height: 250px;
+            overflow-y: auto;
+            border: none;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            scroll-behavior: smooth;
+        }
+
+        .live-preview-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .live-preview-box::-webkit-scrollbar-track {
+            background: var(--input-bg); 
+        }
+        .live-preview-box::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 10px;
+        }
+        
+        .preview-block {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #1e293b;
+        }
+        .preview-block:last-child {
+            border-bottom: none;
+        }
+        .preview-time {
+            color: var(--accent-color);
+            font-size: 12px;
+            margin-bottom: 4px;
+            font-family: monospace;
         }
     </style>
 </head>
@@ -248,7 +267,7 @@
         <div class="header">
             <i class="fa-solid fa-closed-captioning logo-icon"></i>
             <h2>AI Subtitle Translator</h2>
-            <div class="creator-badge">By Tharuk Bandara Edirisooriya</div>
+            <div class="creator-badge">By Tharuk Bandara Edirisuriya</div>
             <p class="subtitle">ස්වභාවිකව කතා කරන සිංහලට පරිවර්තනය කිරීම සඳහා</p>
         </div>
 
@@ -261,14 +280,10 @@
         </div>
 
         <div class="form-group">
-            <label>2. API Key එක ඇතුලත් කරන්න</label>
+            <label>2. Gemini API Key එක ඇතුලත් කරන්න</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-key"></i>
                 <input type="password" id="apiKeyInput" placeholder="ඔබගේ Gemini API Key එක මෙතන අලවන්න...">
-            </div>
-            <div class="api-help-box">
-                <i class="fa-solid fa-circle-info"></i> API Key එකක් නොමැතිද? <br>
-                <a href="https://aistudio.google.com/app/apikey" target="_blank">මෙතනින් Google AI Studio වෙත ගොස්</a> ඔබගේ Google ගිණුමෙන් ලොග් වී <b>"Create API key"</b> ඔබා නොමිලේ Key එකක් ලබාගන්න. ඉන්පසු එය කොපි කර ඉහත කොටුවට දමන්න.
             </div>
         </div>
 
@@ -277,10 +292,9 @@
             <div class="input-wrapper">
                 <i class="fa-solid fa-layer-group"></i>
                 <select id="batchSizeInput">
-                    <option value="40">40 Subtitles per batch</option>
-                    <option value="60" selected>60 Subtitles per batch (නිර්දේශිතයි)</option>
+                    <option value="40" selected>40 Subtitles per batch (සුමට ක්‍රියාකාරීත්වය සඳහා)</option>
+                    <option value="60">60 Subtitles per batch</option>
                     <option value="80">80 Subtitles per batch</option>
-                    <option value="100">100 Subtitles per batch</option>
                 </select>
             </div>
         </div>
@@ -289,11 +303,17 @@
             <i class="fa-solid fa-language"></i> පරිවර්තනය අරඹන්න
         </button>
         
-        <div class="progress-container" id="progressContainer">
+        <div class="processing-area" id="processingArea">
             <div class="progress-bar-bg">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
             <div class="status-text" id="statusMessage">පරිවර්තනය ආරම්භ වෙමින්...</div>
+            
+            <div class="live-preview-box" id="livePreviewBox">
+                <div style="text-align: center; color: #64748b; margin-top: 100px;">
+                    <i class="fa-solid fa-clapperboard"></i> සජීවී පරිවර්තනය මෙහි දිස්වනු ඇත...
+                </div>
+            </div>
         </div>
 
         <button id="downloadBtn">
@@ -304,15 +324,19 @@
     <script>
         let finalTranslatedContent = "";
 
+        // තත්පර ගණනක් රැඳී සිටීම සඳහා (Delay Function)
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
         document.getElementById('translateBtn').addEventListener('click', async function() {
             const fileInput = document.getElementById('srtFileInput');
             const apiKey = document.getElementById('apiKeyInput').value.trim();
             const batchSize = parseInt(document.getElementById('batchSizeInput').value);
             
             const translateBtn = document.getElementById('translateBtn');
-            const progressContainer = document.getElementById('progressContainer');
+            const processingArea = document.getElementById('processingArea');
             const progressFill = document.getElementById('progressFill');
             const status = document.getElementById('statusMessage');
+            const livePreviewBox = document.getElementById('livePreviewBox');
             const downloadBtn = document.getElementById('downloadBtn');
 
             if (fileInput.files.length === 0) {
@@ -322,55 +346,15 @@
                 alert("කරුණාකර API Key එක ඇතුලත් කරන්න!"); return;
             }
 
+            // UI Reset
             translateBtn.disabled = true;
+            translateBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> පරිවර්තනය වෙමින් පවතී...';
             downloadBtn.style.display = "none";
-            progressContainer.style.display = "block";
+            processingArea.style.display = "block";
             progressFill.style.width = "0%";
+            livePreviewBox.innerHTML = ''; 
             finalTranslatedContent = "";
 
-            // පියවර 1: වැඩ කරන Model එකක් Google එකෙන්ම ඉබේම තෝරාගැනීම (Dynamic ListModels)
-            status.innerHTML = `<span style="color:var(--accent-color)"><i class="fa-solid fa-spinner fa-spin"></i> API එකට ගැලපෙන AI මොඩලය සොයමින් පවතී...</span>`;
-            translateBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> කරුණාකර රැඳී සිටින්න...';
-            
-            let targetModelName = "models/gemini-1.5-flash"; // Fallback Model
-            
-            try {
-                const modelsResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                const modelsData = await modelsResponse.json();
-                
-                if (modelsData.error) {
-                    throw new Error(modelsData.error.message);
-                }
-                
-                if (modelsData.models) {
-                    // generateContent වලට support කරන සහ vision/embedding නොවන text මොඩල පමණක් වෙන් කිරීම
-                    const validModels = modelsData.models.filter(m => 
-                        m.supportedGenerationMethods && 
-                        m.supportedGenerationMethods.includes("generateContent") &&
-                        m.name.includes("gemini") &&
-                        !m.name.includes("vision") &&
-                        !m.name.includes("embedding")
-                    );
-                    
-                    if(validModels.length > 0) {
-                        // Flash මොඩල වලට ප්‍රමුඛතාවය දීම, නැතිනම් Pro මොඩල, නැතිනම් තියෙන ඕනෑම මොඩලයක් තේරීම
-                        let selectedModel = validModels.find(m => m.name.includes("flash")) || 
-                                            validModels.find(m => m.name.includes("pro")) || 
-                                            validModels[0];
-                        targetModelName = selectedModel.name;
-                        console.log("Selected Model: " + targetModelName);
-                    } else {
-                        throw new Error("ඔබගේ API Key එකට ගැලපෙන AI මොඩලයක් සොයාගත නොහැක.");
-                    }
-                }
-            } catch (error) {
-                status.innerHTML = `<span style="color:#ef4444"><i class="fa-solid fa-circle-exclamation"></i> API මොඩල පරීක්ෂා කිරීමේ දෝෂයක්: ${error.message}</span>`;
-                translateBtn.disabled = false;
-                translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> නැවත උත්සාහ කරන්න';
-                return;
-            }
-
-            // පියවර 2: ෆයිල් එක කියවා පරිවර්තනය කිරීම
             const file = fileInput.files[0];
             const text = await file.text();
 
@@ -383,50 +367,112 @@
             }
 
             const totalBatches = batches.length;
-            status.innerHTML = `මුළු කාණ්ඩ (Batches) ගණන <strong style="color:var(--accent-color)">${totalBatches}</strong> කි. පරිවර්තනය ආරම්භ වේ...`;
+            
+            // Dynamic Model Fetching
+            status.innerHTML = `<span style="color:var(--accent-color)"><i class="fa-solid fa-magnifying-glass"></i> AI මොඩලය සොයමින් පවතී...</span>`;
+            let targetModelName = "models/gemini-1.5-flash"; 
+            
+            try {
+                const modelsResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+                const modelsData = await modelsResponse.json();
+                if (modelsData.models) {
+                    const validModels = modelsData.models.filter(m => 
+                        m.supportedGenerationMethods && 
+                        m.supportedGenerationMethods.includes("generateContent") &&
+                        m.name.includes("gemini") && !m.name.includes("vision") && !m.name.includes("embedding")
+                    );
+                    if(validModels.length > 0) {
+                        let selectedModel = validModels.find(m => m.name.includes("flash")) || validModels[0];
+                        targetModelName = selectedModel.name;
+                    }
+                }
+            } catch (e) {
+                console.log("Model fetch failed, using default.");
+            }
 
+            // ආරම්භ කිරීම
             for (let i = 0; i < totalBatches; i++) {
-                status.innerHTML = `කාණ්ඩ <strong style="color:var(--accent-color)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
-                
-                const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
-                Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations or borders. Only output the translated SRT content.\n\n${batches[i]}`;
+                let success = false;
+                let retryCount = 0;
+                const maxRetries = 20; // වතාවක් 20ක් දක්වා උත්සාහ කරයි
 
-                // අර අපි කලින් ස්වයංක්‍රීයව හොයාගත්තු මොඩලය (targetModelName) භාවිතයෙන් Request එක යැවීම
+                const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
+                Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations. Only output the translated SRT content.\n\n${batches[i]}`;
+
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/${targetModelName}:generateContent?key=${apiKey}`;
                 const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
 
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestBody)
-                    });
+                // Auto-Retry Loop
+                while (!success && retryCount < maxRetries) {
+                    try {
+                        status.innerHTML = `කාණ්ඩ <strong style="color:var(--accent-color)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
+                        
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(requestBody)
+                        });
 
-                    const data = await response.json();
+                        // "High Demand" හෝ "Rate Limit" ආවොත්
+                        if (response.status === 503 || response.status === 429) {
+                            retryCount++;
+                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-rotate-right fa-spin"></i> සර්වර් කාර්යබහුලයි. නැවත උත්සාහ කරයි (උත්සාහය ${retryCount})...</span>`;
+                            await sleep(5000); // තත්පර 5ක් ඉඳලා ආයෙත් ට්‍රයි කරනවා
+                            continue;
+                        }
 
-                    if (data.error) {
-                        status.innerHTML = `<span style="color:#ef4444"><i class="fa-solid fa-circle-exclamation"></i> පරිවර්තන දෝෂයක්: ${data.error.message}</span>`;
-                        translateBtn.disabled = false;
-                        translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> නැවත උත්සාහ කරන්න';
-                        return;
+                        const data = await response.json();
+
+                        if (data.error) {
+                            throw new Error(data.error.message);
+                        }
+
+                        let translatedText = data.candidates[0].content.parts[0].text;
+                        translatedText = translatedText.replace(/```srt\n/g, '').replace(/```/g, '').trim();
+
+                        finalTranslatedContent += translatedText + "\n\n";
+                        
+                        // Live Preview එකට දත්ත ඇතුලත් කිරීම
+                        const translatedBlocks = translatedText.split(/\r?\n\r?\n/);
+                        translatedBlocks.forEach(block => {
+                            const lines = block.split('\n');
+                            if (lines.length >= 3) {
+                                const seq = lines[0];
+                                const time = lines[1];
+                                const textContent = lines.slice(2).join('<br>');
+                                
+                                const blockHTML = `
+                                    <div class="preview-block">
+                                        <div class="preview-time">${seq} | ${time}</div>
+                                        <div>${textContent}</div>
+                                    </div>
+                                `;
+                                livePreviewBox.insertAdjacentHTML('beforeend', blockHTML);
+                            }
+                        });
+                        
+                        // පෙට්ටිය පහළටම Scroll කිරීම
+                        livePreviewBox.scrollTop = livePreviewBox.scrollHeight;
+
+                        // ප්‍රතිශතය පෙන්වීම
+                        const progressPercentage = Math.round(((i + 1) / totalBatches) * 100);
+                        progressFill.style.width = progressPercentage + "%";
+
+                        success = true; // සාර්ථකයි නම් ලූප් එකෙන් එළියට
+                        await sleep(2000); // සාමාන්‍ය විරාමය
+
+                    } catch (error) {
+                        retryCount++;
+                        status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-rotate-right fa-spin"></i> දෝෂයක්. නැවත උත්සාහ කරයි (උත්සාහය ${retryCount})...</span>`;
+                        await sleep(5000);
+                        
+                        if (retryCount >= maxRetries) {
+                            status.innerHTML = `<span style="color:#ef4444"><i class="fa-solid fa-circle-exclamation"></i> දිගින් දිගටම දෝෂ මතු විය. කරුණාකර පසුව නැවත උත්සාහ කරන්න.</span>`;
+                            translateBtn.disabled = false;
+                            translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> නැවත උත්සාහ කරන්න';
+                            return;
+                        }
                     }
-
-                    let translatedText = data.candidates[0].content.parts[0].text;
-                    translatedText = translatedText.replace(/```srt\n/g, '').replace(/```/g, '').trim();
-
-                    finalTranslatedContent += translatedText + "\n\n";
-
-                    const progressPercentage = Math.round(((i + 1) / totalBatches) * 100);
-                    progressFill.style.width = progressPercentage + "%";
-
-                    // Rate limit protection
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-
-                } catch (error) {
-                    status.innerHTML = '<span style="color:#ef4444"><i class="fa-solid fa-wifi"></i> අන්තර්ජාල සම්බන්ධතා දෝෂයක්. කරුණාකර නැවත උත්සාහ කරන්න.</span>';
-                    translateBtn.disabled = false;
-                    translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> නැවත උත්සාහ කරන්න';
-                    return;
                 }
             }
 
