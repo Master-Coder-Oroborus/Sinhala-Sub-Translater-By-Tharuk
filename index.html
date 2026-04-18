@@ -148,12 +148,12 @@
 
         .api-help-box {
             background-color: var(--help-bg);
-            padding: 12px 15px;
+            padding: 15px;
             border-radius: 8px;
             margin-top: 10px;
             font-size: 13px;
             color: #bae6fd;
-            line-height: 1.5;
+            line-height: 1.6;
             border: none;
         }
 
@@ -335,9 +335,17 @@
                 <i class="fa-solid fa-key"></i>
                 <input type="password" id="apiKeyInput" placeholder="ඔබගේ Gemini API Key එක මෙතන අලවන්න...">
             </div>
+            
             <div class="api-help-box">
                 <i class="fa-solid fa-circle-info"></i> API Key එකක් නොමැතිද? <br>
-                <a href="https://aistudio.google.com/app/apikey" target="_blank">මෙතනින් Google AI Studio වෙත ගොස්</a> ඔබගේ Google ගිණුමෙන් ලොග් වී <b>"Create API key"</b> ඔබා නොමිලේ Key එකක් ලබාගන්න. ඉන්පසු එය කොපි කර ඉහත කොටුවට දමන්න.
+                <a href="https://aistudio.google.com/app/apikey" target="_blank">මෙතනින් Google AI Studio වෙත ගොස්</a> ඔබගේ Google ගිණුමෙන් ලොග් වී <b>"Create API key"</b> ඔබා නොමිලේ Key එකක් ලබාගන්න. ඉන්පසු එය කොපි කර ඉහත කොටුවට දමන්න.<br><br>
+                
+                <span style="color: #fcd34d;"><i class="fa-solid fa-triangle-exclamation"></i> <b>සැලකිලිමත් වෙන්න :</b></span> සාමාන්‍යයෙන් පැය 02ක පමණ උපසිරසියකට එක API Key එකක් වැය වෙනවා, <b>දීර්ඝ උපසිරසි සදහා 80 Subtitles per batch භාවිතා කරන්න</b>, සබ් ෆයිල්ස් කිහිපයකට නව Google Studio එකවුන්ට් කිහිපයක් භාවිතා කරන්න.<br><br>
+                
+                ගැටළු වෙතොත් මාව දැනුවත් කරන්න:<br>
+                <a href="https://www.facebook.com/tharukedirisooriya" target="_blank" style="display:inline-block; margin-top:5px; font-size:14px;">
+                    <i class="fa-brands fa-facebook" style="color: #60a5fa; font-size: 16px;"></i> www.facebook.com/tharukedirisooriya
+                </a>
             </div>
         </div>
 
@@ -380,11 +388,10 @@
         let finalTranslatedContent = "";
         let originalBlocks = [];
         let batchSize = 40;
-        let originalFileName = "Sinhala_Spoken_Subtitles.srt"; // පෙරනිමි නම
+        let originalFileName = "Sinhala_Spoken_Subtitles.srt";
 
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-        // 1. ෆයිල් එක අප්ලෝඩ් කළ වහාම ඉංග්‍රීසි දත්ත තිරයේ පෙන්වීම
         document.getElementById('srtFileInput').addEventListener('change', async function(e) {
             const file = e.target.files[0];
             const translateBtn = document.getElementById('translateBtn');
@@ -393,7 +400,6 @@
             
             if (!file) return;
 
-            // මෙතන තමයි ඔයා ඉල්ලපු වෙනස තියෙන්නේ: "Sinhala - " එකතු කිරීම
             originalFileName = "Sinhala - " + file.name;
 
             const reader = new FileReader();
@@ -408,7 +414,6 @@
                     document.getElementById('progressFill').style.width = "0%";
                     document.getElementById('statusMessage').innerHTML = 'ඉංග්‍රීසි දත්ත පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්.';
 
-                    // ඉංග්‍රීසි සබ්ටයිටල් තිරයට ඇතුලත් කිරීම
                     originalBlocks.forEach((block, index) => {
                         const lines = block.split('\n');
                         if (lines.length >= 3) {
@@ -443,7 +448,6 @@
             reader.readAsText(file);
         });
 
-        // 2. පරිවර්තනය ආරම්භ කිරීම සහ Auto-Retry ක්‍රියාවලිය
         document.getElementById('translateBtn').addEventListener('click', async function() {
             const apiKey = document.getElementById('apiKeyInput').value.trim();
             batchSize = parseInt(document.getElementById('batchSizeInput').value);
@@ -462,7 +466,6 @@
             downloadBtn.style.display = "none";
             finalTranslatedContent = "";
 
-            // Batch වලට වෙන් කිරීම
             const batches = [];
             for (let i = 0; i < originalBlocks.length; i += batchSize) {
                 batches.push(originalBlocks.slice(i, i + batchSize).join("\n\n"));
@@ -490,7 +493,6 @@
                 console.log("Model fetch fallback.");
             }
 
-            // එකින් එක කාණ්ඩ පරිවර්තනය කිරීම
             for (let i = 0; i < totalBatches; i++) {
                 let success = false;
                 let retryCount = 0;
@@ -502,7 +504,6 @@
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/${targetModelName}:generateContent?key=${apiKey}`;
                 const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
 
-                // Auto-Retry Loop
                 while (!success && retryCount < maxRetries) {
                     try {
                         status.innerHTML = `කාණ්ඩ <strong style="color:var(--accent-color)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
@@ -593,7 +594,6 @@
             downloadBtn.style.display = "flex";
         });
 
-        // Download බටන් එකේ ක්‍රියාව
         document.getElementById('downloadBtn').addEventListener('click', function() {
             if (!finalTranslatedContent) return;
             const blob = new Blob([finalTranslatedContent.trim()], { type: 'text/plain' });
@@ -601,10 +601,7 @@
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            
-            // නව ගොනු නාමය මෙතනින් භාවිතා වේ
             a.download = originalFileName; 
-            
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
