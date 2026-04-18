@@ -21,7 +21,6 @@
             --warning-color: #f59e0b;
             --input-bg: #0f172a;
             --help-bg: #0c4a6e;
-            --block-bg: #334155;
         }
 
         body {
@@ -384,8 +383,8 @@
 
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-        // 1. ෆයිල් එක අප්ලෝඩ් කළ වහාම ඉංග්‍රීසි දත්ත තිරයේ පෙන්වීම
-        document.getElementById('srtFileInput').addEventListener('change', async function(e) {
+        // 1. වඩාත් ශක්තිමත් FileReader API මගින් ෆයිල් එක කියවීම
+        document.getElementById('srtFileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             const translateBtn = document.getElementById('translateBtn');
             const livePreviewBox = document.getElementById('livePreviewBox');
@@ -393,46 +392,57 @@
             
             if (!file) return;
 
-            // Original ෆයිල් නම ලබාගෙන ඊට ඉදිරියෙන් "Sinhala - " එකතු කිරීම
             originalFileName = "Sinhala - " + file.name;
 
-            try {
-                const text = await file.text();
-                originalBlocks = text.trim().split(/\r?\n\r?\n/);
-                
-                livePreviewBox.innerHTML = '';
-                processingArea.style.display = "block";
-                document.getElementById('progressFill').style.width = "0%";
-                document.getElementById('statusMessage').innerHTML = 'ඉංග්‍රීසි දත්ත පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්.';
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                try {
+                    // Windows සහ Mac හි හිස්තැන් ගැටළු නිරාකරණය කිරීම (Normalization)
+                    const text = event.target.result.replace(/\r\n/g, '\n').trim();
+                    originalBlocks = text.split(/\n\n+/);
+                    
+                    livePreviewBox.innerHTML = '';
+                    processingArea.style.display = "block";
+                    document.getElementById('progressFill').style.width = "0%";
+                    document.getElementById('statusMessage').innerHTML = 'ඉංග්‍රීසි දත්ත පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්.';
 
-                originalBlocks.forEach((block, index) => {
-                    const lines = block.split('\n');
-                    if (lines.length >= 3) {
-                        const seq = lines[0];
-                        const time = lines[1];
-                        const textContent = lines.slice(2).join('<br>');
-                        
-                        const blockHTML = `
-                            <div class="preview-block" id="sub-block-${index}">
-                                <div class="preview-time">
-                                    <span>${seq} | ${time}</span>
-                                    <span class="status-badge" id="badge-${index}">Pending</span>
+                    // Preview Box එකට ඇතුලත් කිරීම
+                    originalBlocks.forEach((block, index) => {
+                        const lines = block.split('\n');
+                        if (lines.length >= 3) {
+                            const seq = lines[0];
+                            const time = lines[1];
+                            const textContent = lines.slice(2).join('<br>');
+                            
+                            const blockHTML = `
+                                <div class="preview-block" id="sub-block-${index}">
+                                    <div class="preview-time">
+                                        <span>${seq} | ${time}</span>
+                                        <span class="status-badge" id="badge-${index}">Pending</span>
+                                    </div>
+                                    <div class="preview-text" id="text-${index}">${textContent}</div>
                                 </div>
-                                <div class="preview-text" id="text-${index}">${textContent}</div>
-                            </div>
-                        `;
-                        livePreviewBox.insertAdjacentHTML('beforeend', blockHTML);
-                    }
-                });
+                            `;
+                            livePreviewBox.insertAdjacentHTML('beforeend', blockHTML);
+                        }
+                    });
 
-                translateBtn.disabled = false;
-                translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> පරිවර්තනය අරඹන්න';
-            } catch(e) {
-                alert("ෆයිල් එක කියවීමේ දෝෂයක් මතු විය.");
-            }
+                    translateBtn.disabled = false;
+                    translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> පරිවර්තනය අරඹන්න';
+                } catch(error) {
+                    alert("ෆයිල් එක කියවීමේ දෝෂයක් මතු විය: " + error.message);
+                }
+            };
+            
+            reader.onerror = function() {
+                alert("ෆයිල් එක පූරණය කළ නොහැක. කරුණාකර නැවත උත්සාහ කරන්න.");
+            };
+
+            reader.readAsText(file);
         });
 
-        // 2. පරිවර්තනය ආරම්භ කිරීම සහ නිවැරදි කළ Auto-Retry ක්‍රියාවලිය
+        // 2. පරිවර්තනය සහ Auto-Retry 
         document.getElementById('translateBtn').addEventListener('click', async function() {
             const apiKey = document.getElementById('apiKeyInput').value.trim();
             batchSize = parseInt(document.getElementById('batchSizeInput').value);
@@ -440,7 +450,6 @@
             const translateBtn = document.getElementById('translateBtn');
             const progressFill = document.getElementById('progressFill');
             const status = document.getElementById('statusMessage');
-            const livePreviewBox = document.getElementById('livePreviewBox');
             const downloadBtn = document.getElementById('downloadBtn');
 
             if (apiKey === "") {
@@ -459,13 +468,10 @@
 
             const totalBatches = batches.length;
             
-            // Dynamic Model Fetching
             let targetModelName = "models/gemini-1.5-flash"; 
             try {
                 const modelsResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                if (modelsResponse.status !== 200) {
-                     console.log("Model fetch failed. Will try default model.");
-                } else {
+                if (modelsResponse.status === 200) {
                     const modelsData = await modelsResponse.json();
                     if (modelsData.models) {
                         const validModels = modelsData.models.filter(m => 
@@ -482,11 +488,10 @@
                 console.log("Model fetch fallback.");
             }
 
-            // එකින් එක කාණ්ඩ පරිවර්තනය කිරීම
             for (let i = 0; i < totalBatches; i++) {
                 let success = false;
                 let retryCount = 0;
-                const maxRetries = 15; // උපරිම උත්සාහයන් 15කට සීමා කර ඇත
+                const maxRetries = 15;
                 
                 const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
                 Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations. Only output the translated SRT content.\n\n${batches[i]}`;
@@ -501,4 +506,32 @@
                         const response = await fetch(apiUrl, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON
+                            body: JSON.stringify(requestBody)
+                        });
+
+                        if (response.status === 400 || response.status === 403 || response.status === 404) {
+                            const errorData = await response.json();
+                            throw new Error("FATAL_ERROR: " + (errorData.error ? errorData.error.message : "අනවසර API Key එකක් හෝ දත්ත දෝෂයක්."));
+                        }
+
+                        if (response.status === 503 || response.status === 429) {
+                            retryCount++;
+                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-hourglass-half fa-spin"></i> සර්වර් කාර්යබහුලයි. නැවත උත්සාහ කරයි (${retryCount})...</span>`;
+                            await sleep(5000); 
+                            continue;
+                        }
+
+                        const data = await response.json();
+
+                        if (data.error) {
+                            throw new Error("FATAL_ERROR: " + data.error.message);
+                        }
+
+                        let translatedText = data.candidates[0].content.parts[0].text;
+                        // මාක්ඩවුන් ඉවත් කිරීම සහ නිවැරදිව පේළි කැඩීම
+                        translatedText = translatedText.replace(/```srt\n?/gi, '').replace(/```\n?/gi, '').trim();
+                        translatedText = translatedText.replace(/\r\n/g, '\n');
+
+                        finalTranslatedContent += translatedText + "\n\n";
+                        
+                        const translatedBlocks =
