@@ -380,7 +380,7 @@
         let finalTranslatedContent = "";
         let originalBlocks = [];
         let batchSize = 40;
-        let originalFileName = "Sinhala_Spoken_Subtitles.srt"; // Default Name
+        let originalFileName = "Sinhala_Spoken_Subtitles.srt";
 
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -396,40 +396,43 @@
             // Original ෆයිල් නම ලබාගෙන ඊට ඉදිරියෙන් "Sinhala - " එකතු කිරීම
             originalFileName = "Sinhala - " + file.name;
 
-            const text = await file.text();
-            originalBlocks = text.trim().split(/\r?\n\r?\n/);
-            
-            livePreviewBox.innerHTML = '';
-            processingArea.style.display = "block";
-            document.getElementById('progressFill').style.width = "0%";
-            document.getElementById('statusMessage').innerHTML = 'ඉංග්‍රීසි දත්ත පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්.';
+            try {
+                const text = await file.text();
+                originalBlocks = text.trim().split(/\r?\n\r?\n/);
+                
+                livePreviewBox.innerHTML = '';
+                processingArea.style.display = "block";
+                document.getElementById('progressFill').style.width = "0%";
+                document.getElementById('statusMessage').innerHTML = 'ඉංග්‍රීසි දත්ත පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්.';
 
-            // ඉංග්‍රීසි සබ්ටයිටල් තිරයට ඇතුලත් කිරීම
-            originalBlocks.forEach((block, index) => {
-                const lines = block.split('\n');
-                if (lines.length >= 3) {
-                    const seq = lines[0];
-                    const time = lines[1];
-                    const textContent = lines.slice(2).join('<br>');
-                    
-                    const blockHTML = `
-                        <div class="preview-block" id="sub-block-${index}">
-                            <div class="preview-time">
-                                <span>${seq} | ${time}</span>
-                                <span class="status-badge" id="badge-${index}">Pending</span>
+                originalBlocks.forEach((block, index) => {
+                    const lines = block.split('\n');
+                    if (lines.length >= 3) {
+                        const seq = lines[0];
+                        const time = lines[1];
+                        const textContent = lines.slice(2).join('<br>');
+                        
+                        const blockHTML = `
+                            <div class="preview-block" id="sub-block-${index}">
+                                <div class="preview-time">
+                                    <span>${seq} | ${time}</span>
+                                    <span class="status-badge" id="badge-${index}">Pending</span>
+                                </div>
+                                <div class="preview-text" id="text-${index}">${textContent}</div>
                             </div>
-                            <div class="preview-text" id="text-${index}">${textContent}</div>
-                        </div>
-                    `;
-                    livePreviewBox.insertAdjacentHTML('beforeend', blockHTML);
-                }
-            });
+                        `;
+                        livePreviewBox.insertAdjacentHTML('beforeend', blockHTML);
+                    }
+                });
 
-            translateBtn.disabled = false;
-            translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> පරිවර්තනය අරඹන්න';
+                translateBtn.disabled = false;
+                translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> පරිවර්තනය අරඹන්න';
+            } catch(e) {
+                alert("ෆයිල් එක කියවීමේ දෝෂයක් මතු විය.");
+            }
         });
 
-        // 2. පරිවර්තනය ආරම්භ කිරීම සහ Auto-Retry ක්‍රියාවලිය
+        // 2. පරිවර්තනය ආරම්භ කිරීම සහ නිවැරදි කළ Auto-Retry ක්‍රියාවලිය
         document.getElementById('translateBtn').addEventListener('click', async function() {
             const apiKey = document.getElementById('apiKeyInput').value.trim();
             batchSize = parseInt(document.getElementById('batchSizeInput').value);
@@ -449,7 +452,6 @@
             downloadBtn.style.display = "none";
             finalTranslatedContent = "";
 
-            // Batch වලට වෙන් කිරීම
             const batches = [];
             for (let i = 0; i < originalBlocks.length; i += batchSize) {
                 batches.push(originalBlocks.slice(i, i + batchSize).join("\n\n"));
@@ -461,16 +463,42 @@
             let targetModelName = "models/gemini-1.5-flash"; 
             try {
                 const modelsResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                const modelsData = await modelsResponse.json();
-                if (modelsData.models) {
-                    const validModels = modelsData.models.filter(m => 
-                        m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent") &&
-                        m.name.includes("gemini") && !m.name.includes("vision") && !m.name.includes("embedding")
-                    );
-                    if(validModels.length > 0) {
-                        let selectedModel = validModels.find(m => m.name.includes("flash")) || validModels[0];
-                        targetModelName = selectedModel.name;
+                if (modelsResponse.status !== 200) {
+                     console.log("Model fetch failed. Will try default model.");
+                } else {
+                    const modelsData = await modelsResponse.json();
+                    if (modelsData.models) {
+                        const validModels = modelsData.models.filter(m => 
+                            m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent") &&
+                            m.name.includes("gemini") && !m.name.includes("vision") && !m.name.includes("embedding")
+                        );
+                        if(validModels.length > 0) {
+                            let selectedModel = validModels.find(m => m.name.includes("flash")) || validModels[0];
+                            targetModelName = selectedModel.name;
+                        }
                     }
                 }
             } catch (e) {
                 console.log("Model fetch fallback.");
+            }
+
+            // එකින් එක කාණ්ඩ පරිවර්තනය කිරීම
+            for (let i = 0; i < totalBatches; i++) {
+                let success = false;
+                let retryCount = 0;
+                const maxRetries = 15; // උපරිම උත්සාහයන් 15කට සීමා කර ඇත
+                
+                const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
+                Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations. Only output the translated SRT content.\n\n${batches[i]}`;
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/${targetModelName}:generateContent?key=${apiKey}`;
+                const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
+
+                while (!success && retryCount < maxRetries) {
+                    try {
+                        status.innerHTML = `කාණ්ඩ <strong style="color:var(--accent-color)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
+                        
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON
