@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Modern Dark Theme - No borders */
+        /* Modern Dark Flat Theme */
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
@@ -21,6 +21,7 @@
             --warning-color: #f59e0b;
             --input-bg: #0f172a;
             --help-bg: #0c4a6e;
+            --block-bg: #334155;
         }
 
         body {
@@ -39,9 +40,9 @@
         .container {
             background-color: var(--card-bg);
             padding: 40px;
-            border-radius: 16px;
+            border-radius: 12px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            max-width: 700px;
+            max-width: 800px;
             width: 100%;
             border: none;
         }
@@ -55,7 +56,6 @@
             font-size: 48px;
             color: var(--accent-color);
             margin-bottom: 10px;
-            filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.3));
         }
 
         h2 {
@@ -116,7 +116,7 @@
             background-color: var(--input-bg);
             color: var(--text-main);
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-family: inherit;
             font-size: 14px;
             outline: none;
@@ -146,13 +146,35 @@
             box-shadow: 0 0 0 2px var(--accent-color);
         }
 
+        .api-help-box {
+            background-color: var(--help-bg);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #bae6fd;
+            line-height: 1.5;
+            border: none;
+        }
+
+        .api-help-box a {
+            color: #38bdf8;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .api-help-box a:hover {
+            text-decoration: underline;
+        }
+
         button {
             width: 100%;
             padding: 16px;
             background-color: var(--accent-color);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
@@ -165,10 +187,6 @@
 
         button:hover {
             background-color: var(--accent-hover);
-        }
-
-        button:active {
-            transform: scale(0.98);
         }
 
         button:disabled {
@@ -187,7 +205,7 @@
             background-color: #059669;
         }
 
-        /* Progress Bar & Live Preview Area */
+        /* Progress Bar Area */
         .processing-area {
             display: none;
             margin-top: 30px;
@@ -204,31 +222,32 @@
 
         .progress-fill {
             height: 100%;
-            background-color: var(--accent-color);
+            background-color: var(--success-color);
             width: 0%;
             transition: width 0.4s ease;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
         }
 
         .status-text {
             text-align: center;
             font-size: 14px;
             margin-top: 15px;
-            color: var(--text-muted);
+            color: var(--text-main);
+            font-weight: 500;
             min-height: 20px;
         }
 
         /* Live Preview Box */
         .live-preview-box {
             background-color: var(--input-bg);
-            border-radius: 10px;
+            border-radius: 8px;
             margin-top: 20px;
-            padding: 15px;
-            height: 250px;
+            padding: 20px;
+            height: 350px;
             overflow-y: auto;
             border: none;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.6;
             color: #cbd5e1;
             scroll-behavior: smooth;
@@ -241,23 +260,54 @@
             background: var(--input-bg); 
         }
         .live-preview-box::-webkit-scrollbar-thumb {
-            background: #334155; 
+            background: #475569; 
             border-radius: 10px;
         }
         
         .preview-block {
+            background-color: var(--card-bg);
             margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #1e293b;
+            padding: 15px;
+            border-radius: 6px;
+            transition: all 0.5s ease;
+            border-left: 4px solid #475569;
         }
-        .preview-block:last-child {
-            border-bottom: none;
+        
+        .preview-block.translated {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left-color: var(--success-color);
         }
+
         .preview-time {
-            color: var(--accent-color);
+            color: var(--text-muted);
             font-size: 12px;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             font-family: monospace;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .status-badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background-color: #334155;
+            color: #cbd5e1;
+        }
+
+        .status-badge.done {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .preview-text {
+            color: var(--text-main);
+        }
+
+        .preview-text.si-text {
+            color: #a7f3d0;
+            font-weight: 500;
+            font-size: 15px;
         }
     </style>
 </head>
@@ -267,7 +317,7 @@
         <div class="header">
             <i class="fa-solid fa-closed-captioning logo-icon"></i>
             <h2>AI Subtitle Translator</h2>
-            <div class="creator-badge">By Tharuk Bandara Edirisuriya</div>
+            <div class="creator-badge">By Tharuk Bandara Edirisooriya</div>
             <p class="subtitle">ස්වභාවිකව කතා කරන සිංහලට පරිවර්තනය කිරීම සඳහා</p>
         </div>
 
@@ -280,10 +330,14 @@
         </div>
 
         <div class="form-group">
-            <label>2. Gemini API Key එක ඇතුලත් කරන්න</label>
+            <label>2. API Key එක ඇතුලත් කරන්න</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-key"></i>
                 <input type="password" id="apiKeyInput" placeholder="ඔබගේ Gemini API Key එක මෙතන අලවන්න...">
+            </div>
+            <div class="api-help-box">
+                <i class="fa-solid fa-circle-info"></i> API Key එකක් නොමැතිද? <br>
+                <a href="https://aistudio.google.com/app/apikey" target="_blank">මෙතනින් Google AI Studio වෙත ගොස්</a> ඔබගේ Google ගිණුමෙන් ලොග් වී <b>"Create API key"</b> ඔබා නොමිලේ Key එකක් ලබාගන්න. ඉන්පසු එය කොපි කර ඉහත කොටුවට දමන්න.
             </div>
         </div>
 
@@ -299,20 +353,21 @@
             </div>
         </div>
 
-        <button id="translateBtn">
-            <i class="fa-solid fa-language"></i> පරිවර්තනය අරඹන්න
+        <button id="translateBtn" disabled>
+            <i class="fa-solid fa-language"></i> කරුණාකර ෆයිල් එකක් තෝරන්න
         </button>
         
         <div class="processing-area" id="processingArea">
             <div class="progress-bar-bg">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
-            <div class="status-text" id="statusMessage">පරිවර්තනය ආරම්භ වෙමින්...</div>
-            
-            <div class="live-preview-box" id="livePreviewBox">
-                <div style="text-align: center; color: #64748b; margin-top: 100px;">
-                    <i class="fa-solid fa-clapperboard"></i> සජීවී පරිවර්තනය මෙහි දිස්වනු ඇත...
-                </div>
+            <div class="status-text" id="statusMessage">ඉංග්‍රීසි Subtitle පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්...</div>
+        </div>
+
+        <div class="live-preview-box" id="livePreviewBox">
+            <div style="text-align: center; color: #64748b; margin-top: 130px;">
+                <i class="fa-solid fa-file-import fa-2x" style="margin-bottom: 10px;"></i><br>
+                ඔබගේ ෆයිල් එක තේරූ පසු ඉංග්‍රීසි Subtitles මෙහි දිස්වනු ඇත.
             </div>
         </div>
 
@@ -323,62 +378,89 @@
 
     <script>
         let finalTranslatedContent = "";
+        let originalBlocks = [];
+        let batchSize = 40;
 
-        // තත්පර ගණනක් රැඳී සිටීම සඳහා (Delay Function)
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+        // 1. ෆයිල් එක අප්ලෝඩ් කළ වහාම ඉංග්‍රීසි දත්ත තිරයේ පෙන්වීම
+        document.getElementById('srtFileInput').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            const translateBtn = document.getElementById('translateBtn');
+            const livePreviewBox = document.getElementById('livePreviewBox');
+            const processingArea = document.getElementById('processingArea');
+            
+            if (!file) return;
+
+            const text = await file.text();
+            originalBlocks = text.trim().split(/\r?\n\r?\n/);
+            
+            livePreviewBox.innerHTML = '';
+            processingArea.style.display = "block";
+            document.getElementById('progressFill').style.width = "0%";
+            document.getElementById('statusMessage').innerHTML = 'ඉංග්‍රීසි දත්ත පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්.';
+
+            // ඉංග්‍රීසි සබ්ටයිටල් තිරයට ඇතුලත් කිරීම
+            originalBlocks.forEach((block, index) => {
+                const lines = block.split('\n');
+                if (lines.length >= 3) {
+                    const seq = lines[0];
+                    const time = lines[1];
+                    const textContent = lines.slice(2).join('<br>');
+                    
+                    const blockHTML = `
+                        <div class="preview-block" id="sub-block-${index}">
+                            <div class="preview-time">
+                                <span>${seq} | ${time}</span>
+                                <span class="status-badge" id="badge-${index}">Pending</span>
+                            </div>
+                            <div class="preview-text" id="text-${index}">${textContent}</div>
+                        </div>
+                    `;
+                    livePreviewBox.insertAdjacentHTML('beforeend', blockHTML);
+                }
+            });
+
+            translateBtn.disabled = false;
+            translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> පරිවර්තනය අරඹන්න';
+        });
+
+        // 2. පරිවර්තනය ආරම්භ කිරීම සහ Auto-Retry ක්‍රියාවලිය
         document.getElementById('translateBtn').addEventListener('click', async function() {
-            const fileInput = document.getElementById('srtFileInput');
             const apiKey = document.getElementById('apiKeyInput').value.trim();
-            const batchSize = parseInt(document.getElementById('batchSizeInput').value);
+            batchSize = parseInt(document.getElementById('batchSizeInput').value);
             
             const translateBtn = document.getElementById('translateBtn');
-            const processingArea = document.getElementById('processingArea');
             const progressFill = document.getElementById('progressFill');
             const status = document.getElementById('statusMessage');
             const livePreviewBox = document.getElementById('livePreviewBox');
             const downloadBtn = document.getElementById('downloadBtn');
 
-            if (fileInput.files.length === 0) {
-                alert("කරුණාකර .srt ෆයිල් එකක් තෝරන්න!"); return;
-            }
             if (apiKey === "") {
                 alert("කරුණාකර API Key එක ඇතුලත් කරන්න!"); return;
             }
 
-            // UI Reset
             translateBtn.disabled = true;
             translateBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> පරිවර්තනය වෙමින් පවතී...';
             downloadBtn.style.display = "none";
-            processingArea.style.display = "block";
-            progressFill.style.width = "0%";
-            livePreviewBox.innerHTML = ''; 
             finalTranslatedContent = "";
 
-            const file = fileInput.files[0];
-            const text = await file.text();
-
-            const blocks = text.trim().split(/\r?\n\r?\n/);
-            const totalBlocks = blocks.length;
-            
+            // Batch වලට වෙන් කිරීම
             const batches = [];
-            for (let i = 0; i < totalBlocks; i += batchSize) {
-                batches.push(blocks.slice(i, i + batchSize).join("\n\n"));
+            for (let i = 0; i < originalBlocks.length; i += batchSize) {
+                batches.push(originalBlocks.slice(i, i + batchSize).join("\n\n"));
             }
 
             const totalBatches = batches.length;
             
             // Dynamic Model Fetching
-            status.innerHTML = `<span style="color:var(--accent-color)"><i class="fa-solid fa-magnifying-glass"></i> AI මොඩලය සොයමින් පවතී...</span>`;
             let targetModelName = "models/gemini-1.5-flash"; 
-            
             try {
                 const modelsResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
                 const modelsData = await modelsResponse.json();
                 if (modelsData.models) {
                     const validModels = modelsData.models.filter(m => 
-                        m.supportedGenerationMethods && 
-                        m.supportedGenerationMethods.includes("generateContent") &&
+                        m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent") &&
                         m.name.includes("gemini") && !m.name.includes("vision") && !m.name.includes("embedding")
                     );
                     if(validModels.length > 0) {
@@ -387,23 +469,21 @@
                     }
                 }
             } catch (e) {
-                console.log("Model fetch failed, using default.");
+                console.log("Model fetch fallback.");
             }
 
-            // ආරම්භ කිරීම
+            // එකින් එක කාණ්ඩ පරිවර්තනය කිරීම
             for (let i = 0; i < totalBatches; i++) {
                 let success = false;
-                let retryCount = 0;
-                const maxRetries = 20; // වතාවක් 20ක් දක්වා උත්සාහ කරයි
-
+                
                 const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
                 Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations. Only output the translated SRT content.\n\n${batches[i]}`;
 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/${targetModelName}:generateContent?key=${apiKey}`;
                 const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
 
-                // Auto-Retry Loop
-                while (!success && retryCount < maxRetries) {
+                // Auto-Retry Loop - සර්වර් එකේ ඉඩ ලැබෙනතුරු නොනවත්වා උත්සාහ කරයි
+                while (!success) {
                     try {
                         status.innerHTML = `කාණ්ඩ <strong style="color:var(--accent-color)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
                         
@@ -413,11 +493,10 @@
                             body: JSON.stringify(requestBody)
                         });
 
-                        // "High Demand" හෝ "Rate Limit" ආවොත්
+                        // කාර්යබහුල නම් (High Demand / Rate Limit)
                         if (response.status === 503 || response.status === 429) {
-                            retryCount++;
-                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-rotate-right fa-spin"></i> සර්වර් කාර්යබහුලයි. නැවත උත්සාහ කරයි (උත්සාහය ${retryCount})...</span>`;
-                            await sleep(5000); // තත්පර 5ක් ඉඳලා ආයෙත් ට්‍රයි කරනවා
+                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-hourglass-half fa-spin"></i> සර්වර් කාර්යබහුලයි. නැවත උත්සාහ කරයි...</span>`;
+                            await sleep(5000); // තත්පර 5ක් බලා නැවත උත්සාහ කරයි
                             continue;
                         }
 
@@ -432,46 +511,41 @@
 
                         finalTranslatedContent += translatedText + "\n\n";
                         
-                        // Live Preview එකට දත්ත ඇතුලත් කිරීම
+                        // සාර්ථක වූ පසු අදාළ කාණ්ඩයේ UI එක Update කිරීම
                         const translatedBlocks = translatedText.split(/\r?\n\r?\n/);
-                        translatedBlocks.forEach(block => {
+                        translatedBlocks.forEach((block, indexInBatch) => {
+                            const globalIndex = (i * batchSize) + indexInBatch;
                             const lines = block.split('\n');
-                            if (lines.length >= 3) {
-                                const seq = lines[0];
-                                const time = lines[1];
+                            
+                            if (lines.length >= 3 && document.getElementById(`sub-block-${globalIndex}`)) {
                                 const textContent = lines.slice(2).join('<br>');
                                 
-                                const blockHTML = `
-                                    <div class="preview-block">
-                                        <div class="preview-time">${seq} | ${time}</div>
-                                        <div>${textContent}</div>
-                                    </div>
-                                `;
-                                livePreviewBox.insertAdjacentHTML('beforeend', blockHTML);
+                                const blockDiv = document.getElementById(`sub-block-${globalIndex}`);
+                                const textDiv = document.getElementById(`text-${globalIndex}`);
+                                const badgeSpan = document.getElementById(`badge-${globalIndex}`);
+                                
+                                // පෙනුම වෙනස් කිරීම
+                                textDiv.innerHTML = textContent;
+                                textDiv.className = "preview-text si-text";
+                                blockDiv.classList.add("translated");
+                                badgeSpan.innerHTML = '<i class="fa-solid fa-check"></i> Done';
+                                badgeSpan.className = "status-badge done";
+
+                                // Scroll to the newly translated block
+                                blockDiv.scrollIntoView({ behavior: "smooth", block: "center" });
                             }
                         });
-                        
-                        // පෙට්ටිය පහළටම Scroll කිරීම
-                        livePreviewBox.scrollTop = livePreviewBox.scrollHeight;
 
-                        // ප්‍රතිශතය පෙන්වීම
+                        // Progress Bar එක පිරවීම
                         const progressPercentage = Math.round(((i + 1) / totalBatches) * 100);
                         progressFill.style.width = progressPercentage + "%";
 
-                        success = true; // සාර්ථකයි නම් ලූප් එකෙන් එළියට
-                        await sleep(2000); // සාමාන්‍ය විරාමය
+                        success = true; 
+                        await sleep(1500); 
 
                     } catch (error) {
-                        retryCount++;
-                        status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-rotate-right fa-spin"></i> දෝෂයක්. නැවත උත්සාහ කරයි (උත්සාහය ${retryCount})...</span>`;
-                        await sleep(5000);
-                        
-                        if (retryCount >= maxRetries) {
-                            status.innerHTML = `<span style="color:#ef4444"><i class="fa-solid fa-circle-exclamation"></i> දිගින් දිගටම දෝෂ මතු විය. කරුණාකර පසුව නැවත උත්සාහ කරන්න.</span>`;
-                            translateBtn.disabled = false;
-                            translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> නැවත උත්සාහ කරන්න';
-                            return;
-                        }
+                        status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-rotate-right fa-spin"></i> සම්බන්ධතා ගැටළුවක්. නැවත උත්සාහ කරයි...</span>`;
+                        await sleep(5000); // වෙනත් Error එකක් ආවත් තත්පර 5කින් ආයෙත් උත්සාහ කරයි
                     }
                 }
             }
@@ -482,6 +556,7 @@
             downloadBtn.style.display = "flex";
         });
 
+        // Download බටන් එකේ ක්‍රියාව
         document.getElementById('downloadBtn').addEventListener('click', function() {
             if (!finalTranslatedContent) return;
             const blob = new Blob([finalTranslatedContent.trim()], { type: 'text/plain' });
