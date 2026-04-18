@@ -380,6 +380,7 @@
         let finalTranslatedContent = "";
         let originalBlocks = [];
         let batchSize = 40;
+        let originalFileName = "Sinhala_Spoken_Subtitles.srt"; // Default Name
 
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -391,6 +392,9 @@
             const processingArea = document.getElementById('processingArea');
             
             if (!file) return;
+
+            // Original ෆයිල් නම ලබාගෙන ඊට ඉදිරියෙන් "Sinhala - " එකතු කිරීම
+            originalFileName = "Sinhala - " + file.name;
 
             const text = await file.text();
             originalBlocks = text.trim().split(/\r?\n\r?\n/);
@@ -470,105 +474,3 @@
                 }
             } catch (e) {
                 console.log("Model fetch fallback.");
-            }
-
-            // එකින් එක කාණ්ඩ පරිවර්තනය කිරීම
-            for (let i = 0; i < totalBatches; i++) {
-                let success = false;
-                
-                const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
-                Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations. Only output the translated SRT content.\n\n${batches[i]}`;
-
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/${targetModelName}:generateContent?key=${apiKey}`;
-                const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
-
-                // Auto-Retry Loop - සර්වර් එකේ ඉඩ ලැබෙනතුරු නොනවත්වා උත්සාහ කරයි
-                while (!success) {
-                    try {
-                        status.innerHTML = `කාණ්ඩ <strong style="color:var(--accent-color)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
-                        
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(requestBody)
-                        });
-
-                        // කාර්යබහුල නම් (High Demand / Rate Limit)
-                        if (response.status === 503 || response.status === 429) {
-                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-hourglass-half fa-spin"></i> සර්වර් කාර්යබහුලයි. නැවත උත්සාහ කරයි...</span>`;
-                            await sleep(5000); // තත්පර 5ක් බලා නැවත උත්සාහ කරයි
-                            continue;
-                        }
-
-                        const data = await response.json();
-
-                        if (data.error) {
-                            throw new Error(data.error.message);
-                        }
-
-                        let translatedText = data.candidates[0].content.parts[0].text;
-                        translatedText = translatedText.replace(/```srt\n/g, '').replace(/```/g, '').trim();
-
-                        finalTranslatedContent += translatedText + "\n\n";
-                        
-                        // සාර්ථක වූ පසු අදාළ කාණ්ඩයේ UI එක Update කිරීම
-                        const translatedBlocks = translatedText.split(/\r?\n\r?\n/);
-                        translatedBlocks.forEach((block, indexInBatch) => {
-                            const globalIndex = (i * batchSize) + indexInBatch;
-                            const lines = block.split('\n');
-                            
-                            if (lines.length >= 3 && document.getElementById(`sub-block-${globalIndex}`)) {
-                                const textContent = lines.slice(2).join('<br>');
-                                
-                                const blockDiv = document.getElementById(`sub-block-${globalIndex}`);
-                                const textDiv = document.getElementById(`text-${globalIndex}`);
-                                const badgeSpan = document.getElementById(`badge-${globalIndex}`);
-                                
-                                // පෙනුම වෙනස් කිරීම
-                                textDiv.innerHTML = textContent;
-                                textDiv.className = "preview-text si-text";
-                                blockDiv.classList.add("translated");
-                                badgeSpan.innerHTML = '<i class="fa-solid fa-check"></i> Done';
-                                badgeSpan.className = "status-badge done";
-
-                                // Scroll to the newly translated block
-                                blockDiv.scrollIntoView({ behavior: "smooth", block: "center" });
-                            }
-                        });
-
-                        // Progress Bar එක පිරවීම
-                        const progressPercentage = Math.round(((i + 1) / totalBatches) * 100);
-                        progressFill.style.width = progressPercentage + "%";
-
-                        success = true; 
-                        await sleep(1500); 
-
-                    } catch (error) {
-                        status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-rotate-right fa-spin"></i> සම්බන්ධතා ගැටළුවක්. නැවත උත්සාහ කරයි...</span>`;
-                        await sleep(5000); // වෙනත් Error එකක් ආවත් තත්පර 5කින් ආයෙත් උත්සාහ කරයි
-                    }
-                }
-            }
-
-            status.innerHTML = '<span style="color:var(--success-color)"><i class="fa-solid fa-circle-check"></i> පරිවර්තනය 100% ක් සාර්ථකයි!</span>';
-            translateBtn.disabled = false;
-            translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> අලුත් ෆයිල් එකක් පරිවර්තනය කරන්න';
-            downloadBtn.style.display = "flex";
-        });
-
-        // Download බටන් එකේ ක්‍රියාව
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            if (!finalTranslatedContent) return;
-            const blob = new Blob([finalTranslatedContent.trim()], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'Sinhala_Spoken_Subtitles.srt';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        });
-    </script>
-</body>
-</html>
