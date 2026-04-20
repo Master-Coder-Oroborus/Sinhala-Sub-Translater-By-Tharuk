@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Premium Obsidian & Gold/Neon Theme (ඔයා තෝරාගත් තීම් එක) */
+        /* Premium Obsidian & Gold/Neon Theme */
         :root {
             --bg-dark: #0a0a0c;
             --glass-bg: rgba(18, 18, 23, 0.85);
@@ -30,11 +30,7 @@
             font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+            margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden;
         }
 
         /* Animated Background Orbs */
@@ -67,8 +63,7 @@
         .float-item {
             position: absolute; color: rgba(251, 191, 36, 0.04);
             font-family: 'Courier New', Courier, monospace; font-size: 1.2rem;
-            white-space: nowrap; user-select: none;
-            animation: floatUp linear infinite;
+            white-space: nowrap; user-select: none; animation: floatUp linear infinite;
         }
 
         @keyframes floatUp {
@@ -101,7 +96,7 @@
             .right-panel { height: 800px; overflow: visible; }
         }
 
-        /* Logo & Header */
+        /* Header */
         .header { text-align: center; margin-bottom: 30px; }
         
         .premium-logo {
@@ -134,12 +129,10 @@
 
         /* Instruction Box */
         .instruction-box {
-            background: rgba(18, 18, 23, 0.6);
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: rgba(18, 18, 23, 0.6); border: 1px solid rgba(139, 92, 246, 0.3);
             border-radius: 12px; padding: 18px; font-size: 13px;
             color: #d1d5db; line-height: 1.6; margin-top: 15px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-            animation: fadeIn 0.8s ease backwards;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5); animation: fadeIn 0.8s ease backwards;
         }
 
         .instruction-box a { color: var(--accent-gold); font-weight: 600; text-decoration: none; transition: 0.3s; }
@@ -149,18 +142,13 @@
         .fb-link {
             display: inline-flex; align-items: center; gap: 8px; margin-top: 12px;
             background: rgba(139, 92, 246, 0.1); padding: 8px 15px; border-radius: 8px;
-            border: 1px solid rgba(139, 92, 246, 0.3); color: #c4b5fd !important; font-weight: 500;
-            transition: 0.3s;
+            border: 1px solid rgba(139, 92, 246, 0.3); color: #c4b5fd !important; font-weight: 500; transition: 0.3s;
         }
         .fb-link:hover { background: rgba(139, 92, 246, 0.2); transform: translateX(5px); }
 
-        /* Inputs & Forms */
+        /* Form Controls */
         .form-group { margin-bottom: 20px; }
-        
-        label {
-            display: block; margin-bottom: 8px; color: #a1a1aa; font-size: 13px;
-            font-weight: 500; text-transform: uppercase; letter-spacing: 1px;
-        }
+        label { display: block; margin-bottom: 8px; color: #a1a1aa; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
         .input-wrapper { position: relative; display: flex; align-items: center; }
         .input-wrapper i { position: absolute; left: 16px; color: var(--accent-gold); font-size: 16px; }
@@ -171,22 +159,15 @@
             border-radius: 12px; font-family: inherit; font-size: 14px; outline: none; transition: 0.3s;
         }
 
-        /* Black Mixed Dropdown */
-        select {
-            background-color: #050505; 
-            color: var(--text-main);
-            appearance: none; cursor: pointer;
-        }
+        select { background-color: #050505; color: var(--text-main); appearance: none; cursor: pointer; }
         select option { background-color: #0a0a0c; color: #fff; padding: 10px; }
 
         input[type="file"] { padding: 10px 14px 10px 45px; }
-
         input[type="file"]::file-selector-button {
             background: rgba(255, 255, 255, 0.05); color: var(--text-main);
             border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 16px;
             border-radius: 8px; cursor: pointer; margin-right: 15px; font-weight: 500; transition: 0.3s;
         }
-
         input[type="file"]::file-selector-button:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 15px var(--accent-gold-glow); }
         input:focus, select:focus { border-color: var(--accent-gold); box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15); }
 
@@ -198,7 +179,12 @@
             display: flex; justify-content: center; align-items: center; gap: 10px;
             box-shadow: 0 10px 20px rgba(217, 119, 6, 0.2); margin-top: 15px; position: relative; overflow: hidden;
         }
-
+        button::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: skewX(-20deg); transition: 0.5s;
+        }
+        button:hover:not(:disabled)::before { left: 150%; }
         button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(251, 191, 36, 0.3); }
         button:disabled { background: #27272a; color: #52525b; cursor: not-allowed; box-shadow: none; }
 
@@ -206,19 +192,19 @@
 
         /* Status & Progress */
         .processing-area { display: none; margin-top: 20px; }
-        .progress-bar-bg { width: 100%; background-color: rgba(0, 0, 0, 0.8); border-radius: 8px; height: 10px; overflow: hidden; }
+        .progress-bar-bg { width: 100%; background-color: rgba(0, 0, 0, 0.8); border-radius: 8px; height: 10px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-purple), var(--accent-gold)); width: 0%; transition: 0.4s; }
-        .status-text { text-align: center; font-size: 13px; margin-top: 12px; color: var(--text-muted); font-weight: 500; }
+        
+        /* Updated Status Text for Error Messages */
+        .status-text { text-align: center; font-size: 13px; margin-top: 12px; color: var(--text-muted); font-weight: 500; line-height: 1.5; padding: 0 10px;}
 
         /* Live Preview Panel */
         .preview-header {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--glass-border); flex-shrink: 0;
         }
-        
         .preview-header h3 { margin: 0; font-size: 18px; font-weight: 500; color: #fff; display: flex; align-items: center; gap: 10px; }
         
-        /* Stats Counter */
         .stats-badge {
             background: rgba(10, 10, 12, 0.8); border: 1px solid rgba(251, 191, 36, 0.3);
             padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: 600;
@@ -237,15 +223,11 @@
 
         .preview-block {
             background-color: rgba(255, 255, 255, 0.02); margin-bottom: 15px; padding: 20px;
-            border-radius: 12px; border-left: 3px solid #3f3f46; transition: 0.4s;
-            position: relative; overflow: hidden;
+            border-radius: 12px; border-left: 3px solid #3f3f46; transition: 0.4s; position: relative; overflow: hidden;
         }
 
-        /* NEW: Soft Pulsing Effect (Replaced the harsh radar scan) */
-        .preview-block.pending {
-            animation: softPulse 2.5s infinite ease-in-out;
-        }
-        
+        /* Soft Pulsing Effect */
+        .preview-block.pending { animation: softPulse 2.5s infinite ease-in-out; }
         @keyframes softPulse {
             0% { background-color: rgba(255, 255, 255, 0.02); border-left-color: #3f3f46; }
             50% { background-color: rgba(255, 255, 255, 0.06); border-left-color: #52525b; }
@@ -257,35 +239,19 @@
             border-left-color: var(--accent-purple); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .preview-time {
-            color: var(--text-muted); font-size: 12px; margin-bottom: 12px;
-            font-family: 'Courier New', monospace; display: flex; justify-content: space-between; align-items: center;
-        }
+        .preview-time { color: var(--text-muted); font-size: 12px; margin-bottom: 12px; font-family: 'Courier New', monospace; display: flex; justify-content: space-between; align-items: center; }
         
-        .status-badge {
-            font-size: 10px; padding: 3px 8px; border-radius: 8px;
-            background-color: rgba(255,255,255,0.05); color: #71717a; text-transform: uppercase;
-        }
+        .status-badge { font-size: 10px; padding: 3px 8px; border-radius: 8px; background-color: rgba(255,255,255,0.05); color: #71717a; text-transform: uppercase; }
         .status-badge.done { background-color: rgba(139, 92, 246, 0.15); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3); }
 
         .preview-text { color: #d4d4d8; font-size: 15px; }
-        .preview-text.si-text { 
-            color: #fde68a; font-weight: 500; font-size: 16px; 
-            text-shadow: 0 0 10px rgba(251, 191, 36, 0.1); 
-            animation: textFadeIn 0.8s ease-out;
-        }
+        .preview-text.si-text { color: #fde68a; font-weight: 500; font-size: 16px; text-shadow: 0 0 10px rgba(251, 191, 36, 0.1); animation: textFadeIn 0.8s ease-out; }
 
-        @keyframes textFadeIn {
-            0% { opacity: 0; transform: translateY(5px); color: var(--accent-purple); text-shadow: 0 0 20px var(--accent-purple); }
-            100% { opacity: 1; transform: translateY(0); color: #fde68a; }
-        }
-
+        @keyframes textFadeIn { 0% { opacity: 0; transform: translateY(5px); color: var(--accent-purple); text-shadow: 0 0 20px var(--accent-purple); } 100% { opacity: 1; transform: translateY(0); color: #fde68a; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Empty State */
-        .empty-state {
-            height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #52525b; text-align: center;
-        }
+        .empty-state { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #52525b; text-align: center; }
         .empty-state i { font-size: 40px; margin-bottom: 15px; animation: pulseLogo 3s infinite alternate; opacity: 0.5; }
     </style>
 </head>
@@ -296,8 +262,7 @@
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
     </div>
-    <div class="floating-subs-container" id="floatingSubs">
-        </div>
+    <div class="floating-subs-container" id="floatingSubs"></div>
 
     <div class="left-panel">
         <div class="header">
@@ -350,7 +315,7 @@
                     <option value="60">60 Blocks</option>
                     <option value="80">80 Blocks (Fastest)</option>
                 </select>
-                <i class="fa-solid fa-chevron-down select-arrow" style="position:absolute; right:16px;"></i>
+                <i class="fa-solid fa-chevron-down select-arrow" style="position:absolute; right:16px; color:#64748b;"></i>
             </div>
         </div>
 
@@ -388,7 +353,6 @@
     </div>
 
     <script>
-        // Floating Background Animation Logic
         const floatingContainer = document.getElementById('floatingSubs');
         const dummyTexts = [
             "00:01:23,400 --> 00:01:25,500", "{ translating... }", "AI MODEL: GEMINI FLASH", 
@@ -405,16 +369,13 @@
             floatingContainer.appendChild(el);
         }
 
-        // Translation Logic
         let finalTranslatedBlocksMap = new Map();
         let originalBlocks = [];
         let batchSize = 40;
         let originalFileName = "Sinhala_Spoken_Subtitles.srt";
 
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-        const updateStats = () => {
-            document.getElementById('statsCounter').innerText = `${finalTranslatedBlocksMap.size} / ${originalBlocks.length}`;
-        };
+        const updateStats = () => { document.getElementById('statsCounter').innerText = `${finalTranslatedBlocksMap.size} / ${originalBlocks.length}`; };
 
         document.getElementById('srtFileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -492,6 +453,7 @@
             }
 
             const totalBatches = batches.length;
+            let targetModelName = "models/gemini-1.5-flash"; 
             
             for (let i = 0; i < totalBatches; i++) {
                 let success = false;
@@ -501,9 +463,17 @@
                 const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
                 Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations. Only output the translated SRT content.\n\n${batches[i]}`;
 
-                // Fixed connection issue by going straight to the model endpoint safely
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-                const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
+                // Fixed connection issue & Added Safety Settings bypass
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/${targetModelName}:generateContent?key=${apiKey}`;
+                const requestBody = { 
+                    contents: [{ parts: [{ text: promptText }] }],
+                    safetySettings: [
+                        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+                        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+                        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+                        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+                    ]
+                };
 
                 while (!success && retryCount < maxRetries) {
                     try {
@@ -515,17 +485,33 @@
                             body: JSON.stringify(requestBody)
                         });
 
+                        // ADVANCED ERROR HANDLING: Shows the exact error message from Google
                         if (!response.ok) {
-                            if(response.status === 400 || response.status === 403 || response.status === 404) {
-                                throw new Error("FATAL: Invalid API Key or Data.");
+                            const errorData = await response.json();
+                            const apiErrorMsg = errorData.error && errorData.error.message ? errorData.error.message : `API දෝෂයක් (Error ${response.status})`;
+                            
+                            if(response.status === 400) {
+                                throw new Error(`FATAL: දත්ත ප්‍රතික්ෂේප විය - ${apiErrorMsg}`);
+                            }
+                            if(response.status === 403) {
+                                throw new Error(`FATAL: API Key එකේ දෝෂයක් - ${apiErrorMsg}`);
+                            }
+                            if(response.status === 404) {
+                                throw new Error(`FATAL: Model එක සොයාගත නොහැක - ${apiErrorMsg}`);
                             }
                             if(response.status === 429 || response.status === 503) {
                                 throw new Error("RETRY: Server Busy");
                             }
-                            throw new Error(`FATAL: API Error (${response.status})`);
+                            throw new Error(`FATAL: ${apiErrorMsg}`);
                         }
 
                         const data = await response.json();
+                        
+                        // Handle case where AI completely blocked the content despite settings
+                        if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
+                            throw new Error("FATAL: AI එකෙන් මේ කොටස ප්‍රතික්ෂේප කළා (Safety Block).");
+                        }
+
                         let translatedText = data.candidates[0].content.parts[0].text;
                         translatedText = translatedText.replace(/```srt\n?/gi, '').replace(/```\n?/gi, '').trim();
                         translatedText = translatedText.replace(/\r\n/g, '\n');
@@ -567,6 +553,7 @@
 
                     } catch (error) {
                         if (error.message.startsWith("FATAL:")) {
+                            // Shows exact API error on screen
                             status.innerHTML = `<span style="color:var(--danger-color)"><i class="fa-solid fa-triangle-exclamation"></i> ${error.message.replace("FATAL: ", "")}</span>`;
                             translateBtn.disabled = false;
                             translateBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Try Again';
