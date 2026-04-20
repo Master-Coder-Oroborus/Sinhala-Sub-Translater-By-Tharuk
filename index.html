@@ -3,137 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Subtitle Translator By Tharuk</title>
+    <title>Premium AI Subtitle Translator</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Noto+Sans+Sinhala:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Premium Dark Glassmorphism Theme */
+        /* Premium Obsidian & Gold/Neon Theme */
         :root {
-            --bg-grad-1: #0f172a;
-            --bg-grad-2: #1e1b4b;
-            --bg-grad-3: #0f172a;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --bg-dark: #0a0a0c;
+            --bg-panel: #121217;
+            --glass-bg: rgba(18, 18, 23, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.05);
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-color: #0ea5e9;
-            --accent-hover: #38bdf8;
-            --accent-glow: rgba(14, 165, 233, 0.5);
+            --text-muted: #8b8d98;
+            --accent-gold: #fbbf24;
+            --accent-gold-glow: rgba(251, 191, 36, 0.4);
+            --accent-purple: #8b5cf6;
+            --accent-purple-glow: rgba(139, 92, 246, 0.3);
             --success-color: #10b981;
             --warning-color: #f59e0b;
-            --input-bg: rgba(15, 23, 42, 0.6);
-            --help-bg: rgba(12, 74, 110, 0.5);
+            --input-bg: rgba(0, 0, 0, 0.4);
         }
 
         body {
             font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif;
-            background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3));
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             margin: 0;
-            padding: 30px;
-            box-sizing: border-box;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* Full screen lock */
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Animated Background Orbs */
+        .bg-orbs {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
         }
 
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 40px;
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px; height: 400px;
+            background: var(--accent-purple-glow);
+            top: -100px; left: -100px;
+        }
+
+        .orb-2 {
+            width: 500px; height: 500px;
+            background: rgba(14, 165, 233, 0.15);
+            bottom: -200px; right: 20%;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 300px; height: 300px;
+            background: var(--accent-gold-glow);
+            top: 30%; right: -50px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Layout */
+        .left-panel {
+            width: 450px;
+            min-width: 450px;
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-right: 1px solid var(--glass-border);
+            height: 100vh;
             padding: 40px;
-            border-radius: 24px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            max-width: 1400px;
-            width: 100%;
-            min-height: 85vh;
+            box-sizing: border-box;
+            overflow-y: auto;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+            animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .right-panel {
+            flex-grow: 1;
+            height: 100vh;
+            padding: 40px;
+            box-sizing: border-box;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 1s ease-in;
         }
 
         @media (max-width: 992px) {
-            .container {
-                grid-template-columns: 1fr;
-                padding: 25px;
-                min-height: auto;
-            }
+            body { flex-direction: column; overflow: auto; height: auto; }
+            .left-panel { width: 100%; min-width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--glass-border); }
+            .right-panel { height: 80vh; }
         }
 
+        /* Animations */
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Logo & Header */
         .header {
-            text-align: left;
-            margin-bottom: 35px;
-            position: relative;
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        .logo-icon {
-            font-size: 48px;
-            color: var(--accent-color);
-            margin-bottom: 15px;
-            text-shadow: 0 0 20px var(--accent-glow);
-            animation: floatIcon 3s ease-in-out infinite;
+        .premium-logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(139, 92, 246, 0.2));
+            border-radius: 20px;
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            box-shadow: 0 0 25px var(--accent-gold-glow), inset 0 0 15px var(--accent-purple-glow);
+            animation: pulseLogo 3s infinite alternate;
         }
 
-        @keyframes floatIcon {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        @keyframes pulseLogo {
+            0% { box-shadow: 0 0 15px var(--accent-gold-glow), inset 0 0 10px var(--accent-purple-glow); }
+            100% { box-shadow: 0 0 30px var(--accent-gold-glow), inset 0 0 20px var(--accent-purple-glow); transform: scale(1.02); }
         }
 
         h2 {
             margin: 0;
-            font-weight: 600;
-            font-size: 32px;
-            letter-spacing: 0.5px;
-            background: linear-gradient(to right, #fff, #94a3b8);
+            font-weight: 700;
+            font-size: 26px;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #fff, var(--accent-gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
         }
 
         .creator-badge {
             display: inline-block;
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(14, 165, 233, 0.05));
-            border: 1px solid rgba(14, 165, 233, 0.3);
-            color: var(--accent-hover);
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 12px;
-            margin-bottom: 15px;
-            letter-spacing: 0.5px;
-            box-shadow: 0 0 15px rgba(14, 165, 233, 0.1);
-        }
-
-        p.subtitle {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-muted);
-            font-size: 15px;
-            margin: 0;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
         }
 
+        .creator-badge:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        /* Inputs & Forms */
         .form-group {
             margin-bottom: 25px;
-            position: relative;
+            animation: fadeInUp 0.5s ease backwards;
+        }
+        
+        .form-group:nth-child(2) { animation-delay: 0.1s; }
+        .form-group:nth-child(3) { animation-delay: 0.2s; }
+        .form-group:nth-child(4) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         label {
             display: block;
-            margin-bottom: 10px;
-            color: #cbd5e1;
-            font-size: 14px;
+            margin-bottom: 8px;
+            color: #a1a1aa;
+            font-size: 13px;
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .input-wrapper {
@@ -144,14 +215,14 @@
 
         .input-wrapper i {
             position: absolute;
-            left: 15px;
-            color: var(--accent-color);
-            font-size: 18px;
+            left: 16px;
+            color: var(--accent-gold);
+            font-size: 16px;
         }
 
         input[type="file"], input[type="password"], select {
             width: 100%;
-            padding: 16px 16px 16px 45px;
+            padding: 14px 14px 14px 45px;
             background-color: var(--input-bg);
             color: var(--text-main);
             border: 1px solid var(--glass-border);
@@ -162,12 +233,10 @@
             transition: all 0.3s ease;
         }
 
-        input[type="file"] {
-            padding: 12px 15px 12px 45px;
-        }
+        input[type="file"] { padding: 10px 14px 10px 45px; }
 
         input[type="file"]::file-selector-button {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             color: var(--text-main);
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 8px 16px;
@@ -175,603 +244,196 @@
             cursor: pointer;
             margin-right: 15px;
             transition: all 0.3s;
+            font-weight: 500;
         }
 
         input[type="file"]::file-selector-button:hover {
-            background: var(--accent-color);
-            box-shadow: 0 0 15px var(--accent-glow);
+            background: var(--accent-gold);
+            color: #000;
+            box-shadow: 0 0 15px var(--accent-gold-glow);
+            border-color: var(--accent-gold);
         }
 
         input:focus, select:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
-            background-color: rgba(15, 23, 42, 0.8);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+            background-color: rgba(0, 0, 0, 0.6);
         }
 
         .api-help-box {
-            background-color: var(--help-bg);
-            padding: 18px;
-            border-radius: 12px;
-            margin-top: 12px;
-            font-size: 13px;
-            color: #bae6fd;
+            background: rgba(139, 92, 246, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #a78bfa;
             line-height: 1.6;
-            border: 1px solid rgba(14, 165, 233, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
-        .api-help-box a {
-            color: #7dd3fc;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
+        .api-help-box a { color: #ddd6fe; font-weight: 600; text-decoration: none; transition: 0.3s; }
+        .api-help-box a:hover { color: #fff; text-shadow: 0 0 8px rgba(221, 214, 254, 0.8); }
 
-        .api-help-box a:hover {
-            color: #bae6fd;
-            text-decoration: underline;
-            text-shadow: 0 0 8px rgba(125, 211, 252, 0.5);
-        }
-
+        /* Buttons */
         button {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, var(--accent-color), #0284c7);
-            color: white;
+            background: linear-gradient(135deg, var(--accent-gold), #d97706);
+            color: #000;
             border: none;
             border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 10px 20px rgba(217, 119, 6, 0.2);
             position: relative;
             overflow: hidden;
+            margin-top: 10px;
         }
 
-        button::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
-            transform: skewX(-20deg);
+        button::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
             transition: 0.5s;
         }
 
-        button:hover:not(:disabled)::after {
-            left: 150%;
-        }
+        button:hover:not(:disabled)::before { left: 100%; }
 
         button:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 15px 25px rgba(14, 165, 233, 0.4);
+            box-shadow: 0 15px 25px rgba(251, 191, 36, 0.3);
+            background: linear-gradient(135deg, #fcd34d, #d97706);
         }
 
         button:disabled {
-            background: #334155;
-            color: #94a3b8;
+            background: #27272a;
+            color: #52525b;
             box-shadow: none;
             cursor: not-allowed;
-            transform: none;
         }
 
         #downloadBtn {
             background: linear-gradient(135deg, var(--success-color), #059669);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+            color: #fff;
             display: none;
-            margin-top: 20px;
+        }
+        #downloadBtn:hover:not(:disabled) {
+            box-shadow: 0 15px 25px rgba(16, 185, 129, 0.3);
+            background: linear-gradient(135deg, #34d399, #059669);
         }
 
-        #downloadBtn:hover {
-            box-shadow: 0 15px 25px rgba(16, 185, 129, 0.4);
-        }
-
-        .processing-area {
-            display: none;
-            margin-top: 30px;
-        }
+        /* Progress Area */
+        .processing-area { display: none; margin-top: 25px; }
 
         .progress-bar-bg {
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            height: 14px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
+            width: 100%; background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 8px; height: 8px; overflow: hidden;
         }
 
         .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--success-color), #34d399);
-            width: 0%;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
-            position: relative;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent);
-            background-size: 20px 20px;
-            animation: moveStripes 1s linear infinite;
-        }
-
-        @keyframes moveStripes {
-            0% { background-position: 0 0; }
-            100% { background-position: 20px 0; }
+            height: 100%; background: linear-gradient(90deg, var(--accent-purple), var(--accent-gold));
+            width: 0%; transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--accent-gold-glow);
         }
 
         .status-text {
-            text-align: center;
-            font-size: 14px;
-            margin-top: 15px;
-            color: var(--text-main);
-            font-weight: 500;
-            min-height: 20px;
+            text-align: center; font-size: 13px; margin-top: 12px; color: var(--text-muted); min-height: 20px;
         }
 
         /* Right Side: Live Preview */
-        .preview-wrapper {
-            display: flex;
-            flex-direction: column;
-            background: rgba(15, 23, 42, 0.4);
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-            padding: 25px;
-            height: 100%;
-        }
-
         .preview-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--glass-border);
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--glass-border);
         }
 
         .preview-header h3 {
-            margin: 0;
-            font-size: 18px;
-            font-weight: 500;
-            color: #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin: 0; font-size: 18px; font-weight: 500; color: #fff;
+            display: flex; align-items: center; gap: 10px;
         }
 
         .live-preview-box {
-            flex-grow: 1;
-            overflow-y: auto;
-            border-radius: 12px;
-            padding-right: 10px;
-            font-size: 14px;
-            line-height: 1.6;
-            color: #cbd5e1;
+            flex-grow: 1; overflow-y: auto; border-radius: 12px;
+            padding-right: 15px; font-size: 14px; line-height: 1.6;
             scroll-behavior: smooth;
-            max-height: 65vh; /* Keep it contained on large screens */
         }
 
-        .live-preview-box::-webkit-scrollbar {
-            width: 8px;
-        }
-        .live-preview-box::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2); 
-            border-radius: 10px;
-        }
-        .live-preview-box::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.3); 
-            border-radius: 10px;
-        }
-        .live-preview-box::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-color); 
-        }
+        .live-preview-box::-webkit-scrollbar { width: 6px; }
+        .live-preview-box::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .live-preview-box::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        .live-preview-box::-webkit-scrollbar-thumb:hover { background: var(--accent-gold); }
         
         .preview-block {
-            background-color: rgba(30, 41, 59, 0.6);
-            margin-bottom: 15px;
-            padding: 18px;
-            border-radius: 12px;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border-left: 4px solid #475569;
-            animation: slideUp 0.4s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
+            background-color: rgba(255, 255, 255, 0.02);
+            margin-bottom: 15px; padding: 20px; border-radius: 12px;
+            border-left: 3px solid #3f3f46;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUpFade 0.5s ease-out forwards;
+            opacity: 0; transform: translateY(20px);
         }
 
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes slideUpFade {
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .preview-block.translated {
-            background: linear-gradient(to right, rgba(16, 185, 129, 0.1), rgba(30, 41, 59, 0.6));
-            border-left-color: var(--success-color);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transform: scale(1.02);
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.08), rgba(0,0,0,0));
+            border-left-color: var(--accent-purple);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         .preview-time {
-            color: var(--text-muted);
-            font-size: 12px;
-            margin-bottom: 10px;
+            color: var(--text-muted); font-size: 12px; margin-bottom: 12px;
             font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
         }
         
         .status-badge {
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 12px;
-            background-color: rgba(71, 85, 105, 0.5);
-            color: #cbd5e1;
-            font-weight: 600;
-            letter-spacing: 0.5px;
+            font-size: 10px; padding: 3px 8px; border-radius: 8px;
+            background-color: rgba(255,255,255,0.05); color: #71717a; text-transform: uppercase; letter-spacing: 1px;
         }
 
         .status-badge.done {
-            background-color: rgba(16, 185, 129, 0.2);
-            color: var(--success-color);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background-color: rgba(139, 92, 246, 0.15); color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.3);
         }
 
-        .preview-text {
-            color: var(--text-main);
-            font-size: 15px;
-        }
-
+        .preview-text { color: #d4d4d8; font-size: 15px; }
         .preview-text.si-text {
-            color: #a7f3d0;
-            font-weight: 500;
-            font-size: 16px;
-            text-shadow: 0 0 1px rgba(167, 243, 208, 0.2);
+            color: #fde68a; font-weight: 500; font-size: 16px;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.1);
         }
         
-        /* Empty state styling */
+        /* Empty State */
         .empty-state {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #64748b;
-            text-align: center;
-            animation: fadeIn 1s ease-in;
+            height: 100%; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: #52525b;
+            text-align: center; animation: pulseGlow 3s infinite alternate;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .empty-state i {
-            font-size: 48px;
-            margin-bottom: 15px;
-            opacity: 0.5;
+        @keyframes pulseGlow {
+            from { opacity: 0.6; filter: drop-shadow(0 0 0px transparent); }
+            to { opacity: 1; filter: drop-shadow(0 0 15px rgba(255,255,255,0.05)); }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="controls-section">
-            <div class="header">
-                <i class="fa-solid fa-closed-captioning logo-icon"></i>
-                <h2>AI Subtitle Translator</h2>
-                <div class="creator-badge"><i class="fa-solid fa-code"></i> By Tharuk Bandara Edirisooriya</div>
-                <p class="subtitle">ස්වභාවිකව කතා කරන සිංහලට පරිවර්තනය කිරීම සඳහා</p>
-            </div>
-
-            <div class="form-group">
-                <label>1. ඉංග්‍රීසි .srt ෆයිල් එක තෝරන්න</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-file-video"></i>
-                    <input type="file" id="srtFileInput" accept=".srt">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>2. API Key එක ඇතුලත් කරන්න</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-key"></i>
-                    <input type="password" id="apiKeyInput" placeholder="ඔබගේ Gemini API Key එක මෙතන අලවන්න...">
-                </div>
-                
-                <div class="api-help-box">
-                    <i class="fa-solid fa-circle-info"></i> API Key එකක් නොමැතිද? <br>
-                    <a href="https://aistudio.google.com/app/apikey" target="_blank">මෙතනින් Google AI Studio වෙත ගොස්</a> ඔබගේ Google ගිණුමෙන් ලොග් වී <b>"Create API key"</b> ඔබා නොමිලේ Key එකක් ලබාගන්න.<br><br>
-                    
-                    <span style="color: #fcd34d;"><i class="fa-solid fa-triangle-exclamation"></i> <b>සැලකිලිමත් වෙන්න :</b></span> සාමාන්‍යයෙන් පැය 02ක පමණ උපසිරසියකට එක API Key එකක් වැය වෙනවා, <b>දීර්ඝ උපසිරසි සදහා 80 Subtitles per batch භාවිතා කරන්න</b>.<br><br>
-                    
-                    ගැටළු වෙතොත් මාව දැනුවත් කරන්න:<br>
-                    <a href="https://www.facebook.com/tharukedirisooriya" target="_blank" style="display:inline-block; margin-top:8px; font-size:14px;">
-                        <i class="fa-brands fa-facebook" style="color: #38bdf8; font-size: 16px;"></i> www.facebook.com/tharukedirisooriya
-                    </a>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>3. වරකට යවන ප්‍රමාණය (Batch Size)</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <select id="batchSizeInput">
-                        <option value="40" selected>40 Subtitles per batch (සුමට ක්‍රියාකාරීත්වය සඳහා)</option>
-                        <option value="60">60 Subtitles per batch</option>
-                        <option value="80">80 Subtitles per batch</option>
-                    </select>
-                </div>
-            </div>
-
-            <button id="translateBtn" disabled>
-                <i class="fa-solid fa-language"></i> කරුණාකර ෆයිල් එකක් තෝරන්න
-            </button>
-            
-            <div class="processing-area" id="processingArea">
-                <div class="progress-bar-bg">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="status-text" id="statusMessage">ඉංග්‍රීසි Subtitle පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්...</div>
-            </div>
-
-            <button id="downloadBtn">
-                <i class="fa-solid fa-download"></i> සිංහල Subtitle ෆයිල් එක Download කරන්න
-            </button>
-        </div>
-
-        <div class="preview-wrapper">
-            <div class="preview-header">
-                <h3><i class="fa-solid fa-desktop"></i> Live Preview</h3>
-                <span style="font-size: 12px; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: var(--success-color); font-size: 8px;"></i> Real-time Translate</span>
-            </div>
-            
-            <div class="live-preview-box" id="livePreviewBox">
-                <div class="empty-state">
-                    <i class="fa-solid fa-photo-film"></i>
-                    <p>ඔබගේ ෆයිල් එක තේරූ පසු<br>ඉංග්‍රීසි Subtitles මෙහි දිස්වනු ඇත.</p>
-                </div>
-            </div>
-        </div>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
 
-    <script>
-        let finalTranslatedContent = "";
-        let originalBlocks = [];
-        let batchSize = 40;
-        let originalFileName = "Sinhala_Spoken_Subtitles.srt";
-
-        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-        document.getElementById('srtFileInput').addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            const translateBtn = document.getElementById('translateBtn');
-            const livePreviewBox = document.getElementById('livePreviewBox');
-            const processingArea = document.getElementById('processingArea');
-            
-            if (!file) return;
-
-            originalFileName = "Sinhala - " + file.name;
-
-            const reader = new FileReader();
-            
-            reader.onload = function(event) {
-                try {
-                    const text = event.target.result.replace(/\r\n/g, '\n').trim();
-                    originalBlocks = text.split(/\n\n+/);
-                    
-                    livePreviewBox.innerHTML = '';
-                    processingArea.style.display = "block";
-                    document.getElementById('progressFill').style.width = "0%";
-                    document.getElementById('statusMessage').innerHTML = 'ඉංග්‍රීසි දත්ත පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්.';
-
-                    originalBlocks.forEach((block, index) => {
-                        const lines = block.split('\n');
-                        if (lines.length >= 3) {
-                            const seq = lines[0];
-                            const time = lines[1];
-                            const textContent = lines.slice(2).join('<br>');
-                            
-                            // Added inline style for staggered animation delay
-                            const blockHTML = `
-                                <div class="preview-block" id="sub-block-${index}" style="animation-delay: ${Math.min(index * 0.05, 1)}s">
-                                    <div class="preview-time">
-                                        <span>${seq} | ${time}</span>
-                                        <span class="status-badge" id="badge-${index}"><i class="fa-regular fa-clock"></i> Pending</span>
-                                    </div>
-                                    <div class="preview-text" id="text-${index}">${textContent}</div>
-                                </div>
-                            `;
-                            livePreviewBox.insertAdjacentHTML('beforeend', blockHTML);
-                        }
-                    });
-
-                    translateBtn.disabled = false;
-                    translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> පරිවර්තනය අරඹන්න';
-                } catch(error) {
-                    alert("ෆයිල් එක කියවීමේ දෝෂයක් මතු විය: " + error.message);
-                }
-            };
-            
-            reader.onerror = function() {
-                alert("ෆයිල් එක පූරණය කළ නොහැක. කරුණාකර නැවත උත්සාහ කරන්න.");
-            };
-
-            reader.readAsText(file);
-        });
-
-        document.getElementById('translateBtn').addEventListener('click', async function() {
-            const apiKey = document.getElementById('apiKeyInput').value.trim();
-            batchSize = parseInt(document.getElementById('batchSizeInput').value);
-            
-            const translateBtn = document.getElementById('translateBtn');
-            const progressFill = document.getElementById('progressFill');
-            const status = document.getElementById('statusMessage');
-            const downloadBtn = document.getElementById('downloadBtn');
-
-            if (apiKey === "") {
-                alert("කරුණාකර API Key එක ඇතුලත් කරන්න!"); return;
-            }
-
-            translateBtn.disabled = true;
-            translateBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> පරිවර්තනය වෙමින් පවතී...';
-            downloadBtn.style.display = "none";
-            finalTranslatedContent = "";
-
-            const batches = [];
-            for (let i = 0; i < originalBlocks.length; i += batchSize) {
-                batches.push(originalBlocks.slice(i, i + batchSize).join("\n\n"));
-            }
-
-            const totalBatches = batches.length;
-            
-            let targetModelName = "models/gemini-1.5-flash"; 
-            try {
-                const modelsResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                if (modelsResponse.status === 200) {
-                    const modelsData = await modelsResponse.json();
-                    if (modelsData.models) {
-                        const validModels = modelsData.models.filter(m => 
-                            m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent") &&
-                            m.name.includes("gemini") && !m.name.includes("vision") && !m.name.includes("embedding")
-                        );
-                        if(validModels.length > 0) {
-                            let selectedModel = validModels.find(m => m.name.includes("flash")) || validModels[0];
-                            targetModelName = selectedModel.name;
-                        }
-                    }
-                }
-            } catch (e) {
-                console.log("Model fetch fallback.");
-            }
-
-            for (let i = 0; i < totalBatches; i++) {
-                let success = false;
-                let retryCount = 0;
-                const maxRetries = 15;
-                
-                const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
-                Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations. Only output the translated SRT content.\n\n${batches[i]}`;
-
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/${targetModelName}:generateContent?key=${apiKey}`;
-                const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
-
-                while (!success && retryCount < maxRetries) {
-                    try {
-                        status.innerHTML = `කාණ්ඩ <strong style="color:var(--accent-color)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
-                        
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(requestBody)
-                        });
-
-                        if (response.status === 400 || response.status === 403 || response.status === 404) {
-                            const errorData = await response.json();
-                            throw new Error("FATAL_ERROR: " + (errorData.error ? errorData.error.message : "අනවසර API Key එකක් හෝ දත්ත දෝෂයක්."));
-                        }
-
-                        if (response.status === 503 || response.status === 429) {
-                            retryCount++;
-                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-hourglass-half fa-spin"></i> සර්වර් කාර්යබහුලයි. නැවත උත්සාහ කරයි (${retryCount})...</span>`;
-                            await sleep(5000); 
-                            continue;
-                        }
-
-                        const data = await response.json();
-
-                        if (data.error) {
-                            throw new Error("FATAL_ERROR: " + data.error.message);
-                        }
-
-                        let translatedText = data.candidates[0].content.parts[0].text;
-                        translatedText = translatedText.replace(/```srt\n?/gi, '').replace(/```\n?/gi, '').trim();
-                        translatedText = translatedText.replace(/\r\n/g, '\n');
-
-                        finalTranslatedContent += translatedText + "\n\n";
-                        
-                        const translatedBlocks = translatedText.split(/\n\n+/);
-                        translatedBlocks.forEach((block, indexInBatch) => {
-                            const globalIndex = (i * batchSize) + indexInBatch;
-                            const lines = block.split('\n');
-                            
-                            if (lines.length >= 3 && document.getElementById(`sub-block-${globalIndex}`)) {
-                                const textContent = lines.slice(2).join('<br>');
-                                
-                                const blockDiv = document.getElementById(`sub-block-${globalIndex}`);
-                                const textDiv = document.getElementById(`text-${globalIndex}`);
-                                const badgeSpan = document.getElementById(`badge-${globalIndex}`);
-                                
-                                // Apply updates with a tiny delay for visual effect
-                                setTimeout(() => {
-                                    textDiv.innerHTML = textContent;
-                                    textDiv.className = "preview-text si-text";
-                                    blockDiv.classList.add("translated");
-                                    badgeSpan.innerHTML = '<i class="fa-solid fa-check-double"></i> Done';
-                                    badgeSpan.className = "status-badge done";
-                                }, indexInBatch * 100);
-
-                                if(indexInBatch === 0) {
-                                    blockDiv.scrollIntoView({ behavior: "smooth", block: "center" });
-                                }
-                            }
-                        });
-
-                        const progressPercentage = Math.round(((i + 1) / totalBatches) * 100);
-                        progressFill.style.width = progressPercentage + "%";
-
-                        success = true; 
-                        await sleep(1500); 
-
-                    } catch (error) {
-                        if (error.message.startsWith("FATAL_ERROR:")) {
-                            status.innerHTML = `<span style="color:#ef4444"><i class="fa-solid fa-circle-exclamation"></i> දෝෂයක්: ${error.message.replace("FATAL_ERROR: ", "")}</span>`;
-                            translateBtn.disabled = false;
-                            translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> නැවත උත්සාහ කරන්න';
-                            return; 
-                        } else {
-                            retryCount++;
-                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-rotate-right fa-spin"></i> සම්බන්ධතා ගැටළුවක්. නැවත උත්සාහ කරයි (${retryCount})...</span>`;
-                            await sleep(5000); 
-                        }
-                    }
-                }
-
-                if (!success) {
-                    status.innerHTML = `<span style="color:#ef4444"><i class="fa-solid fa-circle-exclamation"></i> දිගින් දිගටම දෝෂ මතු විය. පරිවර්තනය නතර විය.</span>`;
-                    translateBtn.disabled = false;
-                    translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> නැවත උත්සාහ කරන්න';
-                    return;
-                }
-            }
-
-            status.innerHTML = '<span style="color:var(--success-color)"><i class="fa-solid fa-circle-check"></i> පරිවර්තනය 100% ක් සාර්ථකයි!</span>';
-            translateBtn.disabled = false;
-            translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> අලුත් ෆයිල් එකක් පරිවර්තනය කරන්න';
-            downloadBtn.style.display = "flex";
-        });
-
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            if (!finalTranslatedContent) return;
-            const blob = new Blob([finalTranslatedContent.trim()], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = originalFileName; 
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        });
-    </script>
-</body>
-</html>
+    <div class="left-panel">
+        <div class="header">
+            <div class="premium-logo">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6H20C21.1046 6 22 6.89543 22 8V16C22 17.1046 21.1046 18 20 18H4C2.89543 18 2 17.1046 2 16V8C2 6.89543 2.89543 6 4 6Z" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 14H9C9.55228 14 10 13.5523 10 13V11C10 10.4477 9.55228 10 9 10H7C6.44772 10 6 10.4477 6 11V13C6 13.5523 6.44772 14 7 14Z" stroke="#fbbf24" stroke-width="2" stroke-linecap
