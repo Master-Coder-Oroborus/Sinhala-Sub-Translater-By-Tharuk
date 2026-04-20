@@ -9,22 +9,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* True Fullscreen Premium Theme - Dark Violet & Gold */
+        /* Premium Solid Cyber-Pro Theme */
         :root {
-            --bg-color-1: #0f0c29;
-            --bg-color-2: #302b63;
-            --bg-color-3: #24243e;
-            --panel-bg: rgba(15, 12, 41, 0.75);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-muted: #cbd5e1;
-            --accent-color: #fbbf24; /* Premium Gold */
-            --accent-hover: #f59e0b;
-            --accent-glow: rgba(251, 191, 36, 0.5);
-            --success-color: #10b981;
-            --warning-color: #f87171;
-            --input-bg: rgba(0, 0, 0, 0.4);
-            --help-bg: rgba(251, 191, 36, 0.1);
+            --bg-dark: #09090b; /* Deep Black/Zinc */
+            --panel-bg: #18181b; /* Dark Zinc */
+            --border-color: #27272a;
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+            
+            --accent-primary: #10b981; /* Emerald Green */
+            --accent-hover: #059669;
+            --accent-blue: #3b82f6; /* Azure Blue for Logo/Highlights */
+            
+            --dropdown-bg: #1e1b4b; /* Distinct Deep Indigo for Dropdown */
+            --dropdown-border: #6366f1;
+            --dropdown-text: #c7d2fe;
+
+            --input-bg: #09090b;
+            --danger-color: #ef4444;
         }
 
         /* Full Screen Setup */
@@ -33,150 +35,126 @@
             padding: 0;
             width: 100vw;
             height: 100vh;
-            overflow: hidden; /* Prevents whole page scrolling */
+            overflow: hidden;
             font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif;
             color: var(--text-main);
-            background: linear-gradient(135deg, var(--bg-color-1), var(--bg-color-2), var(--bg-color-3));
-            background-size: 300% 300%;
-            animation: gradientBG 15s ease infinite;
+            background-color: var(--bg-dark);
         }
 
-        /* Dynamic Animated Background Particles */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 15% 50%, rgba(251, 191, 36, 0.08), transparent 25%),
-                        radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.1), transparent 25%);
-            z-index: 0;
-            pointer-events: none;
-            animation: pulseGlow 10s infinite alternate;
-        }
-
-        /* 100% Fullscreen Container */
+        /* Container Layout */
         .container {
             width: 100vw;
             height: 100vh;
             display: flex;
-            box-sizing: border-box;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 1;
-            position: relative;
+            background: radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 0% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
         }
 
-        /* Left Side: Controls Panel (Fixed Width) */
+        /* Left Panel - Controls */
         .left-panel {
-            width: 450px;
+            width: 460px;
             height: 100%;
-            background: var(--panel-bg);
-            border-right: 1px solid var(--card-border);
-            padding: 40px 30px;
+            background-color: var(--panel-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 40px;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
-            animation: slideInLeft 0.8s ease-out forwards;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.4);
+            z-index: 10;
+            animation: slideRight 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        /* Right Side: Preview Panel (Fills Remaining Space) */
+        /* Right Panel - Live Preview */
         .right-panel {
             flex-grow: 1;
             height: 100%;
             padding: 40px;
             display: flex;
             flex-direction: column;
-            background: transparent;
-            animation: fadeIn 1s ease-out 0.5s forwards;
+            position: relative;
+            animation: fadeIn 0.8s ease-out 0.2s forwards;
             opacity: 0;
         }
 
-        /* Premium Custom Scrollbars */
+        /* Premium Scrollbars */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
 
-        /* Header & Logo */
+        /* Header & Animated Logo */
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
-        .logo-container {
+        .logo-wrapper {
             position: relative;
-            display: inline-flex;
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 15px auto;
+            display: flex;
             justify-content: center;
             align-items: center;
-            width: 90px;
-            height: 90px;
-            margin-bottom: 15px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 2px 2px rgba(255,255,255,0.1);
+            transform-style: preserve-3d;
+            animation: float 4s ease-in-out infinite alternate;
         }
 
-        .glow-ring {
+        /* Animated border ring */
+        .logo-wrapper::before {
+            content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px dashed var(--accent-color);
-            animation: spinGlow 8s linear infinite;
+            inset: -3px;
+            border-radius: 26px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-primary), var(--accent-blue));
+            background-size: 200% 100%;
+            z-index: -1;
+            animation: rotateGradient 3s linear infinite;
         }
 
-        .glow-ring-inner {
-            position: absolute;
-            width: 70%;
-            height: 70%;
-            border-radius: 50%;
-            border: 2px solid #8b5cf6;
-            animation: spinGlowReverse 4s linear infinite;
-        }
-
-        .logo-icon {
-            font-size: 40px;
-            color: var(--accent-color);
-            text-shadow: 0 0 20px var(--accent-glow);
-            animation: floatIcon 3s ease-in-out infinite alternate;
+        .logo-wrapper i {
+            font-size: 38px;
+            color: #fff;
+            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.8));
+            animation: pulseIcon 2s ease-in-out infinite alternate;
         }
 
         h2 {
             margin: 0;
             font-weight: 700;
-            font-size: 28px;
+            font-size: 26px;
             color: #fff;
-            letter-spacing: 1px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            letter-spacing: 0.5px;
         }
 
         .creator-badge {
             display: inline-block;
-            background: linear-gradient(90deg, rgba(251,191,36,0.1), rgba(251,191,36,0.2));
-            border: 1px solid rgba(251, 191, 36, 0.4);
-            color: var(--accent-color);
-            padding: 6px 20px;
-            border-radius: 30px;
+            background-color: #27272a;
+            color: var(--accent-main);
+            padding: 5px 16px;
+            border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            margin: 12px 0;
+            border: 1px solid #3f3f46;
+            color: #60a5fa;
             letter-spacing: 1px;
-            box-shadow: 0 0 15px var(--accent-glow);
+            text-transform: uppercase;
         }
 
-        p.subtitle {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin: 0;
-        }
+        p.subtitle { color: var(--text-muted); font-size: 14px; font-weight: 400; margin: 0; }
 
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 25px;
-        }
+        /* Form Controls */
+        .form-group { margin-bottom: 24px; }
 
         label {
             display: block;
             margin-bottom: 10px;
-            color: #e2e8f0;
+            color: #e4e4e7;
             font-size: 14px;
             font-weight: 500;
         }
@@ -190,253 +168,293 @@
         .input-wrapper i {
             position: absolute;
             left: 18px;
-            color: var(--accent-color);
-            font-size: 18px;
-            z-index: 2;
+            color: #71717a;
+            font-size: 16px;
+            transition: color 0.3s;
         }
 
-        input[type="file"], input[type="password"], select {
+        .input-wrapper:focus-within i { color: var(--accent-primary); }
+
+        input[type="file"], input[type="password"] {
             width: 100%;
-            padding: 16px 15px 16px 50px;
+            padding: 16px 16px 16px 48px;
             background-color: var(--input-bg);
             color: var(--text-main);
-            border: 1px solid var(--card-border);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             font-family: inherit;
             font-size: 14px;
             outline: none;
             transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
             box-sizing: border-box;
         }
 
-        input[type="file"] { padding: 12px 15px 12px 50px; }
+        /* Specific Styles for Batch Size Dropdown to make it distinct */
+        select#batchSizeInput {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            background-color: var(--dropdown-bg);
+            color: var(--dropdown-text);
+            border: 2px solid var(--dropdown-border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
+            cursor: pointer;
+            appearance: none; /* Removes default arrow to add custom */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c7d2fe' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        .dropdown-icon-override i {
+            color: var(--dropdown-text) !important;
+        }
+
+        input[type="file"] { padding: 12px 16px 12px 48px; }
 
         input[type="file"]::file-selector-button {
-            background: linear-gradient(135deg, #fbbf24, #d97706);
-            color: #000;
+            background-color: #27272a;
+            color: #fff;
             border: none;
-            padding: 10px 18px;
+            padding: 8px 16px;
             border-radius: 8px;
             cursor: pointer;
             margin-right: 15px;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
-        }
-
-        /* Info Boxes */
-        .api-help-box {
-            background-color: rgba(0,0,0,0.3);
-            border-left: 4px solid var(--accent-color);
-            padding: 15px;
-            border-radius: 0 12px 12px 0;
-            margin-top: 15px;
+            transition: background 0.3s;
             font-size: 13px;
-            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #3f3f46;
+        }
+
+        input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        select#batchSizeInput:focus {
+            border-color: #818cf8;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3);
+            background-color: #2e2a69;
+        }
+
+        /* Help Box */
+        .api-help-box {
+            background-color: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #94a3b8;
             line-height: 1.6;
         }
 
-        .api-help-box a { color: var(--accent-color); font-weight: 600; text-decoration: none; }
+        .api-help-box a { color: var(--accent-blue); font-weight: 600; text-decoration: none; }
         .api-help-box a:hover { text-decoration: underline; }
 
-        /* Buttons */
+        /* Solid Professional Buttons */
         button {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(135deg, var(--accent-color), #d97706);
-            color: #000;
+            background-color: var(--accent-primary);
+            color: #fff;
             border: none;
             border-radius: 12px;
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.2);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 10px;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
         }
 
         button:hover:not(:disabled) {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 25px rgba(251, 191, 36, 0.4);
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
         }
 
+        button:active:not(:disabled) { transform: translateY(0); }
+
         button:disabled {
-            background: #334155;
-            color: #94a3b8;
+            background-color: #27272a;
+            color: #52525b;
             cursor: not-allowed;
             box-shadow: none;
-            transform: none;
         }
 
         #downloadBtn {
-            background: linear-gradient(135deg, var(--success-color), #059669);
-            color: white;
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+            background-color: var(--accent-blue);
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
             display: none;
-            margin-top: 20px;
         }
-        #downloadBtn:hover {
-            box-shadow: 0 15px 25px rgba(16, 185, 129, 0.4);
-        }
+        #downloadBtn:hover { background-color: #2563eb; box-shadow: 0 6px 15px rgba(59, 130, 246, 0.3); }
 
-        /* Note Animation */
+        /* Notification Note - Bold & Clear */
         .time-note {
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.4);
-            color: var(--accent-color);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
+            background-color: #4c1d95; /* Deep Violet Warning */
+            border-left: 5px solid #8b5cf6;
+            color: #ddd6fe;
+            padding: 16px 20px;
+            border-radius: 8px;
             font-size: 15px;
             font-weight: 500;
-            margin-bottom: 20px;
-            animation: pulseGlowBox 2s infinite alternate;
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.1);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            animation: slideDownFade 0.5s ease-out;
         }
 
         /* Progress Area */
-        .processing-area { display: none; margin-bottom: 20px; }
+        .processing-area { display: none; margin-bottom: 25px; }
         
         .progress-bar-bg {
             width: 100%;
-            background-color: var(--input-bg);
-            border-radius: 20px;
-            height: 18px;
+            background-color: #27272a;
+            border-radius: 8px;
+            height: 12px;
             overflow: hidden;
-            border: 1px solid var(--card-border);
+            border: 1px solid #3f3f46;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #10b981, #34d399, #fbbf24);
-            background-size: 200% 200%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-primary));
             width: 0%;
             transition: width 0.4s ease;
-            border-radius: 20px;
-            animation: gradientBG 3s ease infinite;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        /* Shine effect on progress bar */
+        .progress-fill::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+            animation: shimmerBar 1.5s infinite;
         }
 
         .status-text {
-            text-align: left;
-            font-size: 16px;
-            margin-top: 10px;
-            color: #e2e8f0;
+            font-size: 15px;
+            margin-bottom: 12px;
+            color: #e4e4e7;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        /* Live Preview Box */
+        /* Live Preview Box - Clean Dark Console look */
         .live-preview-box {
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: #121214; /* Extremely Dark */
             border-radius: 16px;
-            flex-grow: 1; /* Automatically fills the bottom of the right panel */
+            border: 1px solid var(--border-color);
+            flex-grow: 1; 
             overflow-y: auto;
-            border: 1px solid var(--card-border);
             padding: 25px;
-            scroll-behavior: smooth;
+            box-shadow: inset 0 4px 20px rgba(0,0,0,0.5);
         }
 
         .preview-block {
-            background-color: rgba(30, 41, 59, 0.5);
+            background-color: #18181b;
+            border: 1px solid #27272a;
             margin-bottom: 15px;
             padding: 20px;
             border-radius: 12px;
-            transition: all 0.5s ease;
-            border-left: 4px solid #475569;
+            transition: all 0.3s ease;
         }
         
-        .preview-block:hover { background-color: rgba(30, 41, 59, 0.8); }
+        .preview-block:hover { border-color: #3f3f46; background-color: #1e1e24; }
         
         .preview-block.translated {
-            background-color: rgba(16, 185, 129, 0.05);
-            border-left-color: var(--success-color);
+            background-color: rgba(16, 185, 129, 0.03);
             border: 1px solid rgba(16, 185, 129, 0.2);
-            border-left: 4px solid var(--success-color);
+            border-left: 4px solid var(--accent-primary);
         }
 
         .preview-time {
-            color: var(--accent-color);
+            color: #71717a;
             font-size: 13px;
-            margin-bottom: 10px;
-            font-family: monospace;
+            margin-bottom: 12px;
+            font-family: 'Consolas', 'Courier New', monospace;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 8px;
         }
         
         .status-badge {
             font-size: 11px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            background-color: #334155;
-            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background-color: #27272a;
+            color: #a1a1aa;
             font-weight: 600;
             text-transform: uppercase;
         }
 
         .status-badge.done {
-            background: linear-gradient(90deg, var(--success-color), #059669);
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--accent-primary);
         }
 
-        .preview-text { color: var(--text-main); font-size: 16px; line-height: 1.6; }
+        .preview-text { color: #a1a1aa; font-size: 15px; line-height: 1.6; }
 
         .preview-text.si-text {
-            color: #fff;
+            color: #f4f4f5;
             font-weight: 500;
-            font-size: 18px;
+            font-size: 16px;
         }
 
-        /* Animations */
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Keyframe Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-8px); }
         }
-        @keyframes slideInLeft {
+        @keyframes rotateGradient {
+            100% { background-position: 200% center; }
+        }
+        @keyframes pulseIcon {
+            0% { transform: scale(0.95); }
+            100% { transform: scale(1.05); }
+        }
+        @keyframes slideRight {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(0); }
         }
         @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(20px); }
+            0% { opacity: 0; transform: translateY(10px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-        @keyframes spinGlow {
-            100% { transform: rotate(360deg); }
+        @keyframes slideDownFade {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
-        @keyframes spinGlowReverse {
-            100% { transform: rotate(-360deg); }
-        }
-        @keyframes floatIcon {
-            0% { transform: translateY(0px) scale(0.95); }
-            100% { transform: translateY(-5px) scale(1.05); }
-        }
-        @keyframes pulseGlowBox {
-            0% { box-shadow: 0 0 5px rgba(251, 191, 36, 0.1); }
-            100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); }
-        }
-        @keyframes pulseGlow {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
+        @keyframes shimmerBar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
             .container { flex-direction: column; overflow-y: auto; }
-            .left-panel { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--card-border); }
-            .right-panel { height: 800px; }
+            .left-panel { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); padding: 30px; }
+            .right-panel { height: 80vh; padding: 20px; }
             body, html { overflow: auto; }
         }
     </style>
@@ -447,10 +465,8 @@
         
         <div class="left-panel">
             <div class="header">
-                <div class="logo-container">
-                    <div class="glow-ring"></div>
-                    <div class="glow-ring-inner"></div>
-                    <i class="fa-solid fa-closed-captioning logo-icon"></i>
+                <div class="logo-wrapper">
+                    <i class="fa-solid fa-closed-captioning"></i>
                 </div>
                 <h2>AI Subtitle Translator</h2>
                 <div class="creator-badge">By Tharuk Bandara Edirisooriya</div>
@@ -473,16 +489,16 @@
                 </div>
                 
                 <div class="api-help-box">
-                    <i class="fa-solid fa-circle-info"></i> API Key එකක් නොමැතිද? <br>
+                    <i class="fa-solid fa-circle-info" style="color: var(--accent-blue);"></i> API Key එකක් නොමැතිද? <br>
                     <a href="https://aistudio.google.com/app/apikey" target="_blank">මෙතනින් Google AI Studio වෙත ගොස්</a> ඔබගේ Google ගිණුමෙන් ලොග් වී <b>"Create API key"</b> ඔබා නොමිලේ Key එකක් ලබාගන්න.<br><br>
                     
-                    <span style="color: #fca5a5;"><i class="fa-solid fa-triangle-exclamation"></i> <b>සැලකිලිමත් වෙන්න :</b></span> දීර්ඝ උපසිරසි සදහා 80 Subtitles per batch භාවිතා කරන්න, සබ් ෆයිල්ස් කිහිපයකට නව Google Studio එකවුන්ට් කිහිපයක් භාවිතා කරන්න.
+                    <span style="color: #cbd5e1;"><b>සැලකිලිමත් වෙන්න:</b> දීර්ඝ උපසිරසි සදහා 80 Subtitles per batch භාවිතා කරන්න, සබ් ෆයිල්ස් කිහිපයකට නව Google Studio එකවුන්ට් කිහිපයක් භාවිතා කරන්න.</span>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>3. වරකට යවන ප්‍රමාණය (Batch Size)</label>
-                <div class="input-wrapper">
+                <div class="input-wrapper dropdown-icon-override">
                     <i class="fa-solid fa-layer-group"></i>
                     <select id="batchSizeInput">
                         <option value="40" selected>40 Subtitles per batch</option>
@@ -504,22 +520,23 @@
         <div class="right-panel">
             
             <div id="timeNote" class="time-note" style="display:none;">
-                <i class="fa-solid fa-hourglass-half fa-spin"></i> සිංහලට පරිවර්ථනය ඇරඹුනා, එක් ෆයිල් එකක් සදහා උපරිම විනාඩි 10ක කාලයක් ගත වේ.
+                <i class="fa-solid fa-hourglass-half fa-spin" style="font-size: 20px;"></i> 
+                <div>සිංහලට පරිවර්ථනය ඇරඹුනා, එක් ෆයිල් එකක් සදහා උපරිම විනාඩි 10ක කාලයක් ගත වේ.</div>
             </div>
 
             <div class="processing-area" id="processingArea">
-                <div class="status-text" id="statusMessage">ඉංග්‍රීසි Subtitle පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්...</div>
-                <div class="progress-bar-bg" style="margin-top: 10px;">
+                <div class="status-text" id="statusMessage">
+                    <span>ඉංග්‍රීසි Subtitle පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්...</span>
+                </div>
+                <div class="progress-bar-bg">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
             </div>
             
             <div class="live-preview-box" id="livePreviewBox">
-                <div style="text-align: center; color: rgba(255,255,255,0.3); height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <div class="logo-container" style="width: 80px; height: 80px; margin-bottom: 20px; opacity: 0.5;">
-                        <i class="fa-solid fa-file-import fa-3x"></i>
-                    </div>
-                    <span style="font-size: 18px;">ඔබගේ ෆයිල් එක තේරූ පසු ඉංග්‍රීසි Subtitles මෙහි දිස්වනු ඇත.</span>
+                <div style="text-align: center; color: #52525b; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <i class="fa-solid fa-file-import fa-4x" style="margin-bottom: 25px;"></i>
+                    <span style="font-size: 18px; font-weight: 500;">ඔබගේ ෆයිල් එක තේරූ පසු ඉංග්‍රීසි Subtitles මෙහි දිස්වනු ඇත.</span>
                 </div>
             </div>
         </div>
@@ -556,7 +573,7 @@
                     processingArea.style.display = "block";
                     timeNote.style.display = "none";
                     document.getElementById('progressFill').style.width = "0%";
-                    document.getElementById('statusMessage').innerHTML = 'ඉංග්‍රීසි දත්ත පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්.';
+                    document.getElementById('statusMessage').innerHTML = '<span>ඉංග්‍රීසි දත්ත පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්.</span>';
 
                     originalBlocks.forEach((block, index) => {
                         const lines = block.split('\n');
@@ -568,7 +585,7 @@
                             const blockHTML = `
                                 <div class="preview-block" id="sub-block-${index}">
                                     <div class="preview-time">
-                                        <span><i class="fa-regular fa-clock"></i> ${seq} | ${time}</span>
+                                        <span><i class="fa-regular fa-clock" style="margin-right:6px;"></i>${seq} | ${time}</span>
                                         <span class="status-badge" id="badge-${index}">Pending</span>
                                     </div>
                                     <div class="preview-text" id="text-${index}">${textContent}</div>
@@ -579,7 +596,7 @@
                     });
 
                     translateBtn.disabled = false;
-                    translateBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> පරිවර්තනය අරඹන්න';
+                    translateBtn.innerHTML = '<i class="fa-solid fa-play"></i> පරිවර්තනය අරඹන්න';
                 } catch(error) {
                     alert("ෆයිල් එක කියවීමේ දෝෂයක් මතු විය: " + error.message);
                 }
@@ -607,7 +624,7 @@
             }
 
             // Show Note when processing starts
-            timeNote.style.display = "block";
+            timeNote.style.display = "flex";
 
             translateBtn.disabled = true;
             translateBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> පරිවර්තනය වෙමින් පවතී...';
@@ -654,7 +671,7 @@
 
                 while (!success && retryCount < maxRetries) {
                     try {
-                        status.innerHTML = `කාණ්ඩ <strong style="color:var(--accent-color)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
+                        status.innerHTML = `<span>කාණ්ඩ <strong style="color:var(--accent-primary)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...</span>`;
                         
                         const response = await fetch(apiUrl, {
                             method: 'POST',
@@ -669,7 +686,7 @@
 
                         if (response.status === 503 || response.status === 429) {
                             retryCount++;
-                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-hourglass-half fa-spin"></i> සර්වර් කාර්යබහුලයි. නැවත උත්සාහ කරයි (${retryCount})...</span>`;
+                            status.innerHTML = `<span style="color:#f59e0b"><i class="fa-solid fa-hourglass-half fa-spin"></i> සර්වර් කාර්යබහුලයි. නැවත උත්සාහ කරයි (${retryCount})...</span>`;
                             await sleep(5000); 
                             continue;
                         }
@@ -701,7 +718,7 @@
                                 textDiv.innerHTML = textContent;
                                 textDiv.className = "preview-text si-text";
                                 blockDiv.classList.add("translated");
-                                badgeSpan.innerHTML = '<i class="fa-solid fa-check-double"></i> Done';
+                                badgeSpan.innerHTML = '<i class="fa-solid fa-check"></i> Done';
                                 badgeSpan.className = "status-badge done";
 
                                 blockDiv.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -716,31 +733,31 @@
 
                     } catch (error) {
                         if (error.message.startsWith("FATAL_ERROR:")) {
-                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-circle-exclamation"></i> දෝෂයක්: ${error.message.replace("FATAL_ERROR: ", "")}</span>`;
+                            status.innerHTML = `<span style="color:var(--danger-color)"><i class="fa-solid fa-circle-exclamation"></i> දෝෂයක්: ${error.message.replace("FATAL_ERROR: ", "")}</span>`;
                             translateBtn.disabled = false;
-                            translateBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> නැවත උත්සාහ කරන්න';
+                            translateBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> නැවත උත්සාහ කරන්න';
                             timeNote.style.display = "none";
                             return; 
                         } else {
                             retryCount++;
-                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-rotate-right fa-spin"></i> සම්බන්ධතා ගැටළුවක්. නැවත උත්සාහ කරයි (${retryCount})...</span>`;
+                            status.innerHTML = `<span style="color:#f59e0b"><i class="fa-solid fa-rotate-right fa-spin"></i> සම්බන්ධතා ගැටළුවක්. නැවත උත්සාහ කරයි (${retryCount})...</span>`;
                             await sleep(5000); 
                         }
                     }
                 }
 
                 if (!success) {
-                    status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-circle-exclamation"></i> දිගින් දිගටම දෝෂ මතු විය. පරිවර්තනය නතර විය.</span>`;
+                    status.innerHTML = `<span style="color:var(--danger-color)"><i class="fa-solid fa-circle-exclamation"></i> දිගින් දිගටම දෝෂ මතු විය. පරිවර්තනය නතර විය.</span>`;
                     translateBtn.disabled = false;
-                    translateBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> නැවත උත්සාහ කරන්න';
+                    translateBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> නැවත උත්සාහ කරන්න';
                     timeNote.style.display = "none";
                     return;
                 }
             }
 
-            status.innerHTML = '<span style="color:var(--success-color)"><i class="fa-solid fa-circle-check"></i> පරිවර්තනය 100% ක් සාර්ථකයි!</span>';
+            status.innerHTML = '<span style="color:var(--accent-primary)"><i class="fa-solid fa-circle-check"></i> පරිවර්තනය 100% ක් සාර්ථකයි!</span>';
             translateBtn.disabled = false;
-            translateBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> අලුත් ෆයිල් එකක් පරිවර්තනය කරන්න';
+            translateBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> අලුත් ෆයිල් එකක් පරිවර්තනය කරන්න';
             timeNote.style.display = "none"; // Hide note when done
             downloadBtn.style.display = "flex";
         });
