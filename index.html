@@ -3,31 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ඉංග්‍රීසි සබ් සිංහල පරිවර්තකය - Pro</title>
+    <title>ඉංග්‍රීසි සබ් සිංහල පරිවර්තකය</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Ultra Premium Cinematic Theme */
+        /* Beautiful Modern Clean Theme */
         :root {
-            --bg-dark: #030305;
-            --glass-bg: rgba(15, 15, 22, 0.6);
+            --bg-base: #0f172a;
+            --glass-bg: rgba(30, 41, 59, 0.6);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --text-main: #ffffff;
+            --primary: #3b82f6; /* Soft Blue */
+            --primary-glow: rgba(59, 130, 246, 0.4);
+            --secondary: #8b5cf6; /* Soft Purple */
+            --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent-primary: #00f2fe;
-            --accent-secondary: #4facfe;
-            --accent-glow: rgba(0, 242, 254, 0.4);
-            --success-color: #00e676;
-            --warning-color: #ffab00;
-            --danger-color: #ff1744;
-            --input-bg: rgba(0, 0, 0, 0.5);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --input-bg: rgba(15, 23, 42, 0.6);
         }
 
         body {
             font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif;
-            background-color: var(--bg-dark);
+            background-color: var(--bg-base);
             color: var(--text-main);
             margin: 0;
             padding: 0;
@@ -36,56 +36,39 @@
             overflow: hidden;
         }
 
-        /* Animated Aurora Background */
-        .aurora-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
-            background: radial-gradient(circle at top right, rgba(0, 242, 254, 0.1), transparent 40%),
-                        radial-gradient(circle at bottom left, rgba(79, 172, 254, 0.1), transparent 40%);
+        /* Beautiful Soft Mesh Background */
+        .mesh-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.08), transparent 40%);
+            filter: blur(40px);
+            animation: breathe 15s infinite alternate ease-in-out;
         }
 
-        .aurora-shape {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.6;
-            animation: moveAurora 25s infinite alternate ease-in-out;
-            mix-blend-mode: screen;
+        @keyframes breathe {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.1); opacity: 1; }
         }
 
-        .shape-1 { width: 600px; height: 600px; background: rgba(0, 242, 254, 0.15); top: -200px; left: -100px; }
-        .shape-2 { width: 500px; height: 500px; background: rgba(79, 172, 254, 0.15); bottom: -100px; right: -50px; animation-duration: 30s; }
-        .shape-3 { width: 400px; height: 400px; background: rgba(139, 92, 246, 0.1); top: 40%; left: 30%; animation-duration: 20s; }
-
-        @keyframes moveAurora {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(50px, 50px) scale(1.2); }
-            100% { transform: translate(-50px, -20px) scale(0.9); }
-        }
-
-        /* Layout Panels */
+        /* Layout */
         .left-panel {
-            width: 480px;
+            width: 460px;
             flex-shrink: 0;
             background: var(--glass-bg);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-right: 1px solid var(--glass-border);
             height: 100vh;
-            padding: 40px 35px;
+            padding: 40px;
             box-sizing: border-box;
             overflow-y: auto;
             z-index: 10;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 15px 0 40px rgba(0,0,0,0.8);
-            animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.3);
         }
 
-        .left-panel::-webkit-scrollbar { width: 4px; }
+        .left-panel::-webkit-scrollbar { width: 5px; }
         .left-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
         .right-panel {
@@ -97,219 +80,168 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.02) 0%, transparent 100%);
         }
 
         @media (max-width: 992px) {
             body { flex-direction: column; overflow-y: auto; height: auto; }
-            .left-panel { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--glass-border); overflow-y: visible; }
-            .right-panel { height: 900px; overflow: visible; }
+            .left-panel { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--glass-border); }
+            .right-panel { height: 800px; }
         }
 
-        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-        /* Logo & Header */
-        .header { text-align: center; margin-bottom: 30px; position: relative; }
+        /* Elegant Header */
+        .header { text-align: center; margin-bottom: 30px; }
         
-        .premium-logo {
-            width: 75px; height: 75px; margin: 0 auto 15px auto;
-            display: flex; justify-content: center; align-items: center;
-            background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(79, 172, 254, 0.1));
-            border-radius: 22px; border: 1px solid rgba(0, 242, 254, 0.3);
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2), inset 0 0 20px rgba(79, 172, 254, 0.2);
-            animation: floatLogo 4s infinite ease-in-out;
-        }
-
-        @keyframes floatLogo {
-            0%, 100% { transform: translateY(0); box-shadow: 0 0 30px rgba(0, 242, 254, 0.2); }
-            50% { transform: translateY(-8px); box-shadow: 0 10px 40px rgba(0, 242, 254, 0.4); }
+        .logo-icon {
+            font-size: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 15px rgba(59, 130, 246, 0.3));
         }
 
         h2 {
-            margin: 0; font-weight: 700; font-size: 26px; letter-spacing: 0.5px;
-            background: linear-gradient(to right, #fff, var(--accent-primary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin: 0; font-weight: 600; font-size: 24px; letter-spacing: 0.5px;
+            color: #fff;
         }
 
         .creator-badge {
-            display: inline-block; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-muted);
-            padding: 6px 18px; border-radius: 20px; font-size: 12px; font-weight: 500;
-            margin-top: 12px; letter-spacing: 0.5px; transition: 0.3s;
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 500;
+            margin-top: 10px;
         }
-        .creator-badge:hover { border-color: var(--accent-primary); color: #fff; box-shadow: 0 0 15px rgba(0,242,254,0.2); }
 
-        /* User Instructions Box (Restored) */
+        /* Instruction Box */
         .instruction-box {
-            background: rgba(12, 74, 110, 0.3);
-            border: 1px solid rgba(56, 189, 248, 0.3);
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
             border-radius: 12px;
             padding: 18px;
             font-size: 13px;
-            color: #bae6fd;
+            color: #cbd5e1;
             line-height: 1.6;
             margin-top: 15px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-            animation: fadeIn 1s 0.5s both;
         }
 
-        .instruction-box a { color: #38bdf8; font-weight: 600; text-decoration: none; transition: 0.3s; }
-        .instruction-box a:hover { color: #fff; text-shadow: 0 0 8px #38bdf8; }
-        .warning-text { color: #fcd34d; font-weight: 500; }
+        .instruction-box a { color: var(--primary); font-weight: 500; text-decoration: none; transition: 0.3s; }
+        .instruction-box a:hover { color: #60a5fa; text-decoration: underline; }
+        .warning-text { color: var(--warning); font-weight: 500; }
         
         .fb-link {
-            display: inline-flex; align-items: center; gap: 8px; margin-top: 10px;
-            background: rgba(24, 119, 242, 0.1); padding: 8px 15px; border-radius: 8px;
-            border: 1px solid rgba(24, 119, 242, 0.3); transition: 0.3s;
+            display: inline-block; margin-top: 10px;
+            background: rgba(24, 119, 242, 0.1); padding: 8px 12px; border-radius: 8px;
+            color: #60a5fa !important; font-size: 12px;
+            border: 1px solid rgba(24, 119, 242, 0.2);
         }
-        .fb-link:hover { background: rgba(24, 119, 242, 0.2); transform: translateX(5px); }
+        .fb-link i { font-size: 14px; margin-right: 5px; }
 
-        /* Inputs & Forms */
-        .form-group { margin-bottom: 22px; animation: slideUpFade 0.6s backwards; }
-        .form-group:nth-child(2) { animation-delay: 0.1s; }
-        .form-group:nth-child(3) { animation-delay: 0.2s; }
-
+        /* Form Controls */
+        .form-group { margin-bottom: 22px; }
+        
         label {
-            display: block; margin-bottom: 8px; color: #cbd5e1; font-size: 13px;
-            font-weight: 500; letter-spacing: 0.5px;
+            display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 13px;
+            font-weight: 500;
         }
 
         .input-wrapper { position: relative; display: flex; align-items: center; }
-        .input-wrapper i { position: absolute; left: 16px; color: var(--accent-primary); font-size: 16px; }
+        .input-wrapper i { position: absolute; left: 16px; color: var(--primary); font-size: 16px; }
 
         input[type="file"], input[type="password"], select {
-            width: 100%; padding: 15px 15px 15px 48px; background-color: var(--input-bg);
+            width: 100%; padding: 14px 14px 14px 45px; background-color: var(--input-bg);
             color: var(--text-main); border: 1px solid var(--glass-border);
             border-radius: 12px; font-family: inherit; font-size: 14px; outline: none; transition: 0.3s;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        input[type="file"] { padding: 11px 15px 11px 48px; }
+        input[type="file"] { padding: 10px 14px 10px 45px; }
 
         input[type="file"]::file-selector-button {
-            background: rgba(255, 255, 255, 0.08); color: var(--text-main);
-            border: 1px solid rgba(255, 255, 255, 0.15); padding: 8px 18px;
-            border-radius: 8px; cursor: pointer; margin-right: 15px; font-weight: 500; transition: 0.3s;
+            background: rgba(255, 255, 255, 0.1); color: var(--text-main);
+            border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; 
+            margin-right: 15px; font-weight: 500; transition: 0.3s;
         }
 
-        input[type="file"]::file-selector-button:hover { background: var(--accent-primary); color: #000; border-color: var(--accent-primary); }
-        input:focus, select:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15), inset 0 2px 5px rgba(0,0,0,0.5); }
+        input[type="file"]::file-selector-button:hover { background: var(--primary); color: #fff; }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
 
-        /* Buttons */
+        /* Elegant Buttons */
         button {
-            width: 100%; padding: 16px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            color: #000; border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
-            letter-spacing: 0.5px; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 100%; padding: 15px; background: var(--primary);
+            color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease;
             display: flex; justify-content: center; align-items: center; gap: 10px;
-            box-shadow: 0 10px 25px rgba(0, 242, 254, 0.3); margin-top: 10px; position: relative; overflow: hidden;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); margin-top: 10px;
         }
 
-        button::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-            transform: skewX(-25deg); transition: 0.6s;
-        }
-        button:hover:not(:disabled)::after { left: 150%; }
-        button:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 242, 254, 0.5); color: #fff; }
-        button:disabled { background: rgba(255,255,255,0.05); color: #64748b; cursor: not-allowed; box-shadow: none; border: 1px solid rgba(255,255,255,0.1); }
+        button:hover:not(:disabled) { transform: translateY(-2px); background: #2563eb; box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); }
+        button:disabled { background: rgba(51, 65, 85, 0.5); color: #94a3b8; cursor: not-allowed; box-shadow: none; }
 
-        #downloadBtn { background: linear-gradient(135deg, #00b09b, #96c93d); box-shadow: 0 10px 25px rgba(0, 176, 155, 0.3); display: none; margin-top: 20px; }
-        #downloadBtn:hover:not(:disabled) { box-shadow: 0 15px 30px rgba(0, 176, 155, 0.5); }
+        #downloadBtn { background: var(--success); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); display: none; margin-top: 20px; }
+        #downloadBtn:hover:not(:disabled) { background: #059669; }
 
-        /* Progress Area */
-        .processing-area { display: none; margin-top: 25px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px solid var(--glass-border); }
-        .progress-bar-bg { width: 100%; background-color: rgba(255,255,255,0.05); border-radius: 8px; height: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary)); width: 0%; transition: 0.5s ease-out; box-shadow: 0 0 15px var(--accent-primary); }
-        .status-text { text-align: center; font-size: 13px; margin-top: 12px; color: #e2e8f0; font-weight: 500; }
+        /* Status & Progress */
+        .processing-area { display: none; margin-top: 20px; }
+        .progress-bar-bg { width: 100%; background-color: rgba(0,0,0,0.3); border-radius: 8px; height: 8px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: 0.4s ease; }
+        .status-text { text-align: center; font-size: 13px; margin-top: 10px; color: #cbd5e1; font-weight: 500; }
 
-        /* Live Preview Panel */
+        /* Live Preview Setup */
         .preview-header {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--glass-border); flex-shrink: 0;
+            margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--glass-border);
         }
-        .preview-header h3 { margin: 0; font-size: 18px; font-weight: 500; color: #fff; display: flex; align-items: center; gap: 10px; }
-        .live-indicator {
-            font-size: 11px; color: var(--accent-primary); background: rgba(0, 242, 254, 0.1);
-            padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(0, 242, 254, 0.2);
-            display: flex; align-items: center; gap: 6px; font-weight: 600; letter-spacing: 0.5px;
-        }
+        .preview-header h3 { margin: 0; font-size: 18px; font-weight: 500; display: flex; align-items: center; gap: 10px; }
 
         .live-preview-box {
             flex-grow: 1; overflow-y: auto; border-radius: 12px; padding-right: 15px;
-            font-size: 15px; line-height: 1.7; scroll-behavior: smooth;
+            font-size: 14px; line-height: 1.6; scroll-behavior: smooth;
         }
 
         .live-preview-box::-webkit-scrollbar { width: 6px; }
-        .live-preview-box::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
-        .live-preview-box::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
-        .live-preview-box::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
+        .live-preview-box::-webkit-scrollbar-track { background: transparent; }
+        .live-preview-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
         .preview-block {
-            background-color: rgba(255, 255, 255, 0.03); margin-bottom: 18px; padding: 22px;
-            border-radius: 16px; border-left: 3px solid #334155; transition: all 0.5s ease;
-            position: relative; overflow: hidden;
+            background-color: rgba(30, 41, 59, 0.4); margin-bottom: 15px; padding: 20px;
+            border-radius: 12px; border-left: 3px solid #475569; transition: all 0.4s ease;
         }
 
         .preview-block.translated {
-            background: linear-gradient(135deg, rgba(0, 242, 254, 0.08), rgba(0,0,0,0.2));
-            border-left-color: var(--accent-primary);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            transform: scale(1.01);
+            background: rgba(59, 130, 246, 0.05);
+            border-left-color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .preview-time {
-            color: #64748b; font-size: 12px; margin-bottom: 12px;
-            font-family: 'Courier New', monospace; display: flex; justify-content: space-between; align-items: center;
+            color: #94a3b8; font-size: 12px; margin-bottom: 10px;
+            font-family: monospace; display: flex; justify-content: space-between; align-items: center;
         }
         
         .status-badge {
-            font-size: 10px; padding: 4px 10px; border-radius: 8px;
-            background-color: rgba(255,255,255,0.05); color: #94a3b8; font-weight: 600;
+            font-size: 10px; padding: 3px 8px; border-radius: 6px;
+            background: rgba(255,255,255,0.05); color: #94a3b8;
         }
-        .status-badge.done { background-color: rgba(0, 242, 254, 0.15); color: var(--accent-primary); border: 1px solid rgba(0, 242, 254, 0.3); }
+        .status-badge.done { background: rgba(59, 130, 246, 0.15); color: #93c5fd; }
 
-        .preview-text { color: #cbd5e1; }
-        .preview-text.si-text {
-            color: #ffffff; font-weight: 500; font-size: 17px;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            animation: textGlow 1.5s ease-out;
-        }
+        .preview-text { color: #e2e8f0; }
+        .preview-text.si-text { color: #fff; font-weight: 500; font-size: 15px; }
 
-        @keyframes textGlow {
-            0% { color: var(--accent-primary); text-shadow: 0 0 20px var(--accent-primary); }
-            100% { color: #ffffff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
-        }
-
-        /* Empty State */
         .empty-state {
             height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: #475569; text-align: center;
+            color: #64748b; text-align: center;
         }
-        .empty-state i { font-size: 50px; margin-bottom: 20px; opacity: 0.5; animation: floatLogo 4s infinite ease-in-out; }
-
-        /* Helpers */
-        @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .empty-state i { font-size: 48px; margin-bottom: 15px; opacity: 0.7; color: #475569; }
     </style>
 </head>
 <body>
 
-    <div class="aurora-bg">
-        <div class="aurora-shape shape-1"></div>
-        <div class="aurora-shape shape-2"></div>
-        <div class="aurora-shape shape-3"></div>
-    </div>
+    <div class="mesh-bg"></div>
 
     <div class="left-panel">
         <div class="header">
-            <div class="premium-logo">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 6H20C21.1046 6 22 6.89543 22 8V16C22 17.1046 21.1046 18 20 18H4C2.89543 18 2 17.1046 2 16V8C2 6.89543 2.89543 6 4 6Z" stroke="#00f2fe" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M7 14H9C9.55228 14 10 13.5523 10 13V11C10 10.4477 9.55228 10 9 10H7C6.44772 10 6 10.4477 6 11V13C6 13.5523 6.44772 14 7 14Z" stroke="#00f2fe" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M14 14H16C16.5523 14 17 13.5523 17 13V11C17 10.4477 16.5523 10 16 10H14C13.4477 10 13 10.4477 13 11V13C13 13.5523 13.4477 14 14 14Z" stroke="#00f2fe" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M19.5 3.5L18 5M4.5 3.5L6 5M12 2V4" stroke="#4facfe" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </div>
+            <i class="fa-solid fa-language logo-icon"></i>
             <h2>ඉංග්‍රීසි සබ් සිංහල පරිවර්තකය</h2>
             <div class="creator-badge"><i class="fa-solid fa-code"></i> By Tharuk Bandara Edirisooriya</div>
         </div>
@@ -317,7 +249,7 @@
         <div class="form-group">
             <label>1. ඉංග්‍රීසි .srt ෆයිල් එක තෝරන්න</label>
             <div class="input-wrapper">
-                <i class="fa-solid fa-file-import"></i>
+                <i class="fa-solid fa-file-arrow-up"></i>
                 <input type="file" id="srtFileInput" accept=".srt">
             </div>
         </div>
@@ -330,13 +262,13 @@
             </div>
             
             <div class="instruction-box">
-                <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i> API Key එකක් නොමැතිද? <br>
-                <a href="https://aistudio.google.com/app/apikey" target="_blank">මෙතනින් Google AI Studio වෙත ගොස්</a> ඔබගේ Google ගිණුමෙන් ලොග් වී <b>"Create API key"</b> ඔබා නොමිලේ Key එකක් ලබාගන්න. ඉන්පසු එය කොපි කර ඉහත කොටුවට දමන්න.<br><br>
+                <i class="fa-solid fa-circle-info" style="color: var(--primary);"></i> <b>API Key එකක් නොමැතිද?</b><br>
+                <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a> වෙත ගොස් ඔබගේ Google ගිණුමෙන් ලොග් වී "Create API key" ඔබා නොමිලේ Key එකක් ලබාගන්න.<br><br>
                 
-                <span class="warning-text"><i class="fa-solid fa-triangle-exclamation"></i> සැලකිලිමත් වෙන්න :</span> සාමාන්‍යයෙන් පැය 02ක පමණ උපසිරසියකට එක API Key එකක් වැය වෙනවා, <b>දීර්ඝ උපසිරසි සදහා 80 Subtitles per batch භාවිතා කරන්න</b>, සබ් ෆයිල්ස් කිහිපයකට නව Google Studio එකවුන්ට් කිහිපයක් භාවිතා කරන්න.<br>
+                <span class="warning-text"><i class="fa-solid fa-triangle-exclamation"></i> සැලකිලිමත් වෙන්න:</span> සාමාන්‍යයෙන් පැය 02ක පමණ උපසිරසියකට එක API Key එකක් වැය වෙනවා. <b>දීර්ඝ උපසිරසි සදහා 80 Subtitles per batch භාවිතා කරන්න.</b><br>
                 
                 <a href="https://www.facebook.com/tharukedirisooriya" target="_blank" class="fb-link">
-                    <i class="fa-brands fa-facebook" style="color: #60a5fa; font-size: 18px;"></i> ගැටළු වෙතොත් දැනුවත් කරන්න
+                    <i class="fa-brands fa-facebook"></i> ගැටළු වෙතොත් දැනුවත් කරන්න
                 </a>
             </div>
         </div>
@@ -344,7 +276,7 @@
         <div class="form-group">
             <label>3. වරකට යවන ප්‍රමාණය (Batch Size)</label>
             <div class="input-wrapper">
-                <i class="fa-solid fa-microchip"></i>
+                <i class="fa-solid fa-layer-group"></i>
                 <select id="batchSizeInput">
                     <option value="40" selected>40 Subtitles (සුමට ක්‍රියාකාරීත්වය සඳහා)</option>
                     <option value="60">60 Subtitles</option>
@@ -354,7 +286,7 @@
         </div>
 
         <button id="translateBtn" disabled>
-            <i class="fa-solid fa-language"></i> කරුණාකර ෆයිල් එකක් තෝරන්න
+            <i class="fa-solid fa-play"></i> කරුණාකර ෆයිල් එකක් තෝරන්න
         </button>
         
         <div class="processing-area" id="processingArea">
@@ -365,21 +297,18 @@
         </div>
 
         <button id="downloadBtn">
-            <i class="fa-solid fa-cloud-arrow-down"></i> සිංහල Subtitle ෆයිල් එක Download කරන්න
+            <i class="fa-solid fa-download"></i> සිංහල Subtitle ෆයිල් එක Download කරන්න
         </button>
     </div>
 
     <div class="right-panel">
         <div class="preview-header">
-            <h3><i class="fa-solid fa-satellite-dish" style="color: var(--accent-primary);"></i> Live AI Translation</h3>
-            <span class="live-indicator">
-                <i class="fa-solid fa-circle fa-beat-fade" style="font-size: 8px;"></i> SYNCING
-            </span>
+            <h3><i class="fa-solid fa-desktop" style="color: var(--primary);"></i> Live Preview</h3>
         </div>
         
         <div class="live-preview-box" id="livePreviewBox">
             <div class="empty-state">
-                <i class="fa-brands fa-space-awesome"></i>
+                <i class="fa-solid fa-photo-film"></i>
                 <p>ඔබගේ ෆයිල් එක තේරූ පසු<br>ඉංග්‍රීසි Subtitles මෙහි දිස්වනු ඇත.</p>
             </div>
         </div>
@@ -413,7 +342,7 @@
                     livePreviewBox.innerHTML = '';
                     processingArea.style.display = "block";
                     document.getElementById('progressFill').style.width = "0%";
-                    document.getElementById('statusMessage').innerHTML = '<span style="color:var(--success-color)">ඉංග්‍රීසි දත්ත පූරණය විය. පරිවර්තනය ආරම්භ කිරීමට සූදානම්.</span>';
+                    document.getElementById('statusMessage').innerHTML = '<span style="color:var(--success)">ෆයිල් එක සාර්ථකව පූරණය විය.</span>';
                     finalTranslatedBlocksMap.clear();
 
                     originalBlocks.forEach((block, index) => {
@@ -424,10 +353,10 @@
                             const textContent = lines.slice(2).join('<br>');
                             
                             const blockHTML = `
-                                <div class="preview-block" id="sub-block-${index}" style="animation: slideUpFade 0.5s ${Math.min(index*0.02, 0.5)}s backwards;">
+                                <div class="preview-block" id="sub-block-${index}">
                                     <div class="preview-time">
                                         <span>${seq} | ${time}</span>
-                                        <span class="status-badge" id="badge-${index}"><i class="fa-solid fa-hourglass-start"></i> Queue</span>
+                                        <span class="status-badge" id="badge-${index}"><i class="fa-solid fa-clock"></i> පෝලිමේ</span>
                                     </div>
                                     <div class="preview-text" id="text-${index}">${textContent}</div>
                                 </div>
@@ -439,7 +368,7 @@
                     translateBtn.disabled = false;
                     translateBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> පරිවර්තනය අරඹන්න';
                 } catch(error) {
-                    alert("ෆයිල් එක කියවීමේ දෝෂයක්. කරුණාකර නිවැරදි SRT ෆයිල් එකක් තෝරන්න.");
+                    alert("ෆයිල් එක කියවීමේ දෝෂයක්. කරුණාකර නිවැරදි .srt ෆයිල් එකක් තෝරන්න.");
                 }
             };
             reader.readAsText(file);
@@ -455,13 +384,41 @@
             const downloadBtn = document.getElementById('downloadBtn');
 
             if (!apiKey) {
-                status.innerHTML = `<span style="color:var(--danger-color)"><i class="fa-solid fa-circle-xmark"></i> කරුණාකර API Key එක ඇතුලත් කරන්න!</span>`;
+                status.innerHTML = `<span style="color:var(--danger)"><i class="fa-solid fa-triangle-exclamation"></i> කරුණාකර API Key එක ඇතුලත් කරන්න!</span>`;
                 return;
             }
 
             translateBtn.disabled = true;
-            translateBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> පරිවර්තනය වෙමින් පවතී...';
+            translateBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> පරිවර්තනය වෙමින් පවතී...';
             downloadBtn.style.display = "none";
+
+            // --- 404 Fix: Dynamic Model Checking ---
+            let targetModelName = "models/gemini-1.5-flash"; 
+            try {
+                status.innerHTML = "API සම්බන්ධතාවය පරීක්ෂා කරමින් පවතී...";
+                const modelsResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+                if (modelsResponse.ok) {
+                    const modelsData = await modelsResponse.json();
+                    if (modelsData.models) {
+                        const validModels = modelsData.models.filter(m => 
+                            m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent") &&
+                            m.name.includes("gemini") && !m.name.includes("vision") && !m.name.includes("embedding")
+                        );
+                        if(validModels.length > 0) {
+                            let selectedModel = validModels.find(m => m.name.includes("flash")) || validModels[0];
+                            targetModelName = selectedModel.name; 
+                        }
+                    }
+                } else if (modelsResponse.status === 400 || modelsResponse.status === 403) {
+                    status.innerHTML = `<span style="color:var(--danger)"><i class="fa-solid fa-xmark"></i> වැරදි API Key එකක්.</span>`;
+                    translateBtn.disabled = false;
+                    translateBtn.innerHTML = 'නැවත උත්සාහ කරන්න';
+                    return;
+                }
+            } catch (e) {
+                console.log("Model fetch fallback used.");
+            }
+            // ---------------------------------------
 
             const batches = [];
             for (let i = 0; i < originalBlocks.length; i += batchSize) {
@@ -478,12 +435,13 @@
                 const promptText = `You are a professional subtitle translator. Translate the following English SRT blocks into natural, everyday conversational Sinhala (කතා කරන සිංහල) used in Sri Lanka. 
                 Strictly keep the exact SRT format (Sequence numbers and Timestamps MUST remain untouched). Do not add any extra explanations. Only output the translated SRT content.\n\n${batches[i]}`;
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                // Using the dynamically found model safely
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/${targetModelName}:generateContent?key=${apiKey}`;
                 const requestBody = { contents: [{ parts: [{ text: promptText }] }] };
 
                 while (!success && retryCount < maxRetries) {
                     try {
-                        status.innerHTML = `කාණ්ඩ <strong style="color:var(--accent-primary)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
+                        status.innerHTML = `කාණ්ඩ <strong style="color:var(--primary)">${i + 1} / ${totalBatches}</strong> පරිවර්තනය වෙමින් පවතී...`;
                         
                         const response = await fetch(apiUrl, {
                             method: 'POST',
@@ -492,9 +450,8 @@
                         });
 
                         if (!response.ok) {
-                            const errorData = await response.json();
-                            if(response.status === 400 || response.status === 403) {
-                                throw new Error("FATAL: අනවසර API Key එකක්. කරුණාකර නිවැරදි Key එක ඇතුලත් කරන්න.");
+                            if(response.status === 400 || response.status === 403 || response.status === 404) {
+                                throw new Error("FATAL: API Key එකේ දෝෂයක්. (Error 404/403)");
                             }
                             if(response.status === 429 || response.status === 503) {
                                 throw new Error("RETRY: Server Busy");
@@ -507,7 +464,6 @@
                         translatedText = translatedText.replace(/```srt\n?/gi, '').replace(/```\n?/gi, '').trim();
                         translatedText = translatedText.replace(/\r\n/g, '\n');
 
-                        // SMART MATCHING LOGIC
                         const translatedBlocks = translatedText.split(/\n\n+/);
                         translatedBlocks.forEach((block) => {
                             const lines = block.split('\n');
@@ -526,7 +482,7 @@
                                         textDiv.innerHTML = textContent;
                                         textDiv.className = "preview-text si-text";
                                         blockDiv.classList.add("translated");
-                                        badgeSpan.innerHTML = '<i class="fa-solid fa-check-double"></i> Done';
+                                        badgeSpan.innerHTML = '<i class="fa-solid fa-check"></i> නිමයි';
                                         badgeSpan.className = "status-badge done";
                                         
                                         blockDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -542,20 +498,20 @@
 
                     } catch (error) {
                         if (error.message.startsWith("FATAL:")) {
-                            status.innerHTML = `<span style="color:var(--danger-color)"><i class="fa-solid fa-triangle-exclamation"></i> දෝෂයක්: ${error.message.replace("FATAL: ", "")}</span>`;
+                            status.innerHTML = `<span style="color:var(--danger)"><i class="fa-solid fa-circle-exclamation"></i> ${error.message.replace("FATAL: ", "")}</span>`;
                             translateBtn.disabled = false;
                             translateBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> නැවත උත්සාහ කරන්න';
                             return; 
                         } else {
                             retryCount++;
-                            status.innerHTML = `<span style="color:var(--warning-color)"><i class="fa-solid fa-network-wired"></i> කාර්යබහුලයි. නැවත උත්සාහ කරයි (${retryCount})...</span>`;
+                            status.innerHTML = `<span style="color:var(--warning)"><i class="fa-solid fa-rotate"></i> කාර්යබහුලයි. නැවත උත්සාහ කරයි (${retryCount})...</span>`;
                             await sleep(5000); 
                         }
                     }
                 }
             }
 
-            status.innerHTML = '<span style="color:var(--success-color)"><i class="fa-solid fa-circle-check"></i> පරිවර්තනය 100% ක් සාර්ථකයි!</span>';
+            status.innerHTML = '<span style="color:var(--success)"><i class="fa-solid fa-circle-check"></i> පරිවර්තනය 100% ක් සාර්ථකයි!</span>';
             translateBtn.disabled = false;
             translateBtn.innerHTML = '<i class="fa-solid fa-language"></i> තව ෆයිල් එකක් පරිවර්තනය කරන්න';
             downloadBtn.style.display = "flex";
